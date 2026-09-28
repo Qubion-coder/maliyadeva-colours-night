@@ -9,10 +9,10 @@ export default function EventDetailsSection() {
   const createGoogleCalendarLink = () => {
     const title = encodeURIComponent("Billionaire's Night - Annual Staff Get Together");
     const details = encodeURIComponent(
-      "North Western II Region Annual Staff Get Together at Lotus Ballroom, Asliya, Golden Cassandra, Kurunegala."
+      "North Western II Region Annual Staff Get Together at Asliya Golden Cassandra, Kurunegala."
     );
     const location = encodeURIComponent(
-      "Lotus Ballroom, Asliya, Golden Cassandra, Dambokka, Kurunegala"
+      "Asliya Golden Cassandra, Dambokka, Kurunegala"
     );
     // 2026-11-14 18:00 to 23:59 local (UTC approx)
     const dates = "20261114T123000Z/20261114T183000Z";
@@ -32,7 +32,7 @@ export default function EventDetailsSection() {
       'DTEND:20261114T190000Z',
       'SUMMARY:Billionaire\'s Night - Annual Staff Get Together',
       'DESCRIPTION:North Western II Region Annual Staff Get Together',
-      'LOCATION:Lotus Ballroom\\, Asliya\\, Golden Cassandra\\, Dambokka\\, Kurunegala',
+      'LOCATION:Asliya Golden Cassandra\\, Dambokka\\, Kurunegala',
       'STATUS:CONFIRMED',
       'END:VEVENT',
       'END:VCALENDAR',
@@ -49,7 +49,7 @@ export default function EventDetailsSection() {
 
   const handleCopyVenue = () => {
     navigator.clipboard.writeText(
-      'Lotus Ballroom, Asliya, Golden Cassandra, Dambokka, Kurunegala'
+      'Asliya Golden Cassandra, Dambokka, Kurunegala'
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
@@ -143,11 +143,7 @@ export default function EventDetailsSection() {
             </p>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-[#d4af37]/20 flex items-center gap-2">
-            <span className="text-[11px] font-sans-modern text-neutral-400">
-              Red carpet & welcome cocktails at 5:30 PM
-            </span>
-          </div>
+
         </div>
 
         {/* CARD 3: VENUE */}
@@ -167,11 +163,9 @@ export default function EventDetailsSection() {
             </p>
 
             <h3 className="font-cinzel text-lg font-bold text-[#fcfaf5] tracking-wide mb-1">
-              Lotus Ballroom
+              Asliya Golden Cassandra
             </h3>
             <p className="text-xs text-[#e6d5b8] font-sans-modern leading-relaxed">
-              Asliya, Golden Cassandra,
-              <br />
               Dambokka, Kurunegala
             </p>
           </div>

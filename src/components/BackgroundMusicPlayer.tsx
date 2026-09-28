@@ -7,101 +7,53 @@ interface MusicControllerProps {
   inline?: boolean;
 }
 
-// Sophisticated VIP Gala Chords (Key of D Major / B Minor with 9ths & Maj7ths)
-const CHORD_FREQS = [
-  // Bm9: B2, D3, F#3, A3, C#4
-  [123.47, 146.83, 185.0, 220.0, 277.18],
-  // Gmaj9: G2, D3, F#3, B3, D4
-  [98.0, 146.83, 185.0, 246.94, 293.66],
-  // Dmaj9: D2, A2, F#3, C#4, E4
-  [73.42, 110.0, 185.0, 277.18, 329.63],
-  // A7sus4 -> A: A2, E3, G3, B3, C#4
-  [110.0, 164.81, 196.0, 246.94, 277.18],
-];
-
 export class LuxuryAudioEngine {
-  private ctx: AudioContext | null = null;
-  private isRunning: boolean = false;
-  private intervalId: number | null = null;
-  private masterGain: GainNode | null = null;
-  private chordIndex: number = 0;
+  private audio: HTMLAudioElement | null = null;
+  private running: boolean = false;
 
   public init() {
-    if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      this.ctx = new AudioCtx();
-      this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-      this.masterGain.connect(this.ctx.destination);
-    }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    if (!this.audio) {
+      this.audio = new Audio('/[HQ] - I Believe (Instrumental) - CTV Olympics theme.mp3');
+      this.audio.loop = true;
+      this.audio.volume = 0.5;
     }
   }
 
-  public play() {
+  public async playAudio(): Promise<boolean> {
     this.init();
-    if (!this.ctx || !this.masterGain) return;
-    this.isRunning = true;
-    this.playNextChord();
-
-    // Loop chords every 3.2 seconds
-    this.intervalId = window.setInterval(() => {
-      if (!this.isRunning) return;
-      this.playNextChord();
-    }, 3200);
-  }
-
-  private playNextChord() {
-    if (!this.ctx || !this.masterGain) return;
-    const freqs = CHORD_FREQS[this.chordIndex];
-    this.chordIndex = (this.chordIndex + 1) % CHORD_FREQS.length;
-
-    const now = this.ctx.currentTime;
-
-    // Soft warm pad & bell arpeggiation
-    freqs.forEach((freq, idx) => {
-      if (!this.ctx || !this.masterGain) return;
-      const osc = this.ctx.createOscillator();
-      const noteGain = this.ctx.createGain();
-
-      // Sine + Triangle warmth
-      osc.type = idx === 0 ? 'triangle' : 'sine';
-      osc.frequency.setValueAtTime(freq, now);
-
-      // Delicate envelope
-      const delay = idx * 0.12;
-      noteGain.gain.setValueAtTime(0.0001, now + delay);
-      noteGain.gain.linearRampToValueAtTime(0.06 / (idx + 1), now + delay + 0.4);
-      noteGain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 3.0);
-
-      osc.connect(noteGain);
-      noteGain.connect(this.masterGain);
-
-      osc.start(now + delay);
-      osc.stop(now + delay + 3.1);
-    });
+    if (!this.audio) return false;
+    try {
+      await this.audio.play();
+      this.running = true;
+      return true;
+    } catch (err) {
+      console.log("Audio autoplay was prevented:", err);
+      this.running = false;
+      return false;
+    }
   }
 
   public stop() {
-    this.isRunning = false;
-    if (this.intervalId !== null) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-    if (this.ctx && this.masterGain) {
-      this.masterGain.gain.setTargetAtTime(0.0001, this.ctx.currentTime, 0.3);
+    if (this.audio) {
+      this.audio.pause();
+      this.running = false;
     }
   }
 
   public toggle(): boolean {
-    if (this.isRunning) {
+    if (this.running) {
       this.stop();
       return false;
     } else {
-      this.play();
+      // For synchronous toggle behavior from UI
+      this.playAudio();
+      this.running = true; // Assume true immediately for UI responsiveness
       return true;
     }
+  }
+
+  public isPlaying(): boolean {
+    return this.running;
   }
 }
 

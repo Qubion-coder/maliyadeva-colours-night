@@ -16,6 +16,42 @@ export default function App() {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [isRsvpOpen, setIsRsvpOpen] = useState(false);
 
+  useEffect(() => {
+    // Attempt auto-play on load
+    const attemptAutoplay = async () => {
+      const success = await luxuryAudio.playAudio();
+      if (success) {
+        setIsMusicPlaying(true);
+      }
+    };
+    
+    attemptAutoplay();
+
+    // Fallback to start playing on first user interaction if autoplay was blocked
+    const handleFirstInteraction = async () => {
+      if (!luxuryAudio.isPlaying()) {
+        const success = await luxuryAudio.playAudio();
+        if (success) {
+          setIsMusicPlaying(true);
+        }
+      }
+      // Remove listeners after first interaction
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('scroll', handleFirstInteraction);
+    };
+
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
+    document.addEventListener('scroll', handleFirstInteraction, { passive: true });
+
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('scroll', handleFirstInteraction);
+    };
+  }, []);
+
   // Toggle background gala lounge music
   const handleToggleMusic = () => {
     const newState = luxuryAudio.toggle();
@@ -81,7 +117,7 @@ export default function App() {
         {/* 6. RSVP SECTION ("RESERVE YOUR PLACE" CTA & Coordinator details) */}
         <RsvpSection onOpenRsvp={() => setIsRsvpOpen(true)} />
 
-        {/* 7. LOCATION SECTION (Lotus Ballroom, Kurunegala, Map embed & Google Maps link) */}
+        {/* 7. LOCATION SECTION (Asliya Golden Cassandra, Kurunegala, Map embed & Google Maps link) */}
         <LocationSection />
 
         {/* 8. FINAL CLOSING SECTION (QR Code, Script farewell, Gold Heart, "14 • 11 • 2026") */}

@@ -78,11 +78,11 @@ export default function HeroSection({ onOpenRsvp, onScrollToVideo, onScrollToDet
             BILLIONAIRE'S
           </h1>
 
-          {/* Night with Cursive Script and Flanking Infinity Swirls */}
-          <div className="flex items-center justify-center -mt-3 sm:-mt-6 gap-2 sm:gap-6 w-full">
+          {/* Night with Cinzel and Flanking Infinity Swirls */}
+          <div className="flex items-center justify-center -mt-1 sm:-mt-2 gap-2 sm:gap-6 w-full">
             <InfinitySwirl side="left" className="w-16 sm:w-28 md:w-36 h-8 sm:h-12" />
-            <span className="font-script text-5xl sm:text-7xl md:text-8xl text-gold-gradient font-normal tracking-wide px-2 select-none transform -rotate-3 hover:rotate-0 transition-transform duration-500">
-              Night
+            <span className="font-cinzel-decorative text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-[0.08em] sm:tracking-[0.12em] text-gold-gradient select-none uppercase px-2">
+              NIGHT
             </span>
             <InfinitySwirl side="right" className="w-16 sm:w-28 md:w-36 h-8 sm:h-12" />
           </div>
@@ -91,7 +91,6 @@ export default function HeroSection({ onOpenRsvp, onScrollToVideo, onScrollToDet
         {/* Ribbon / Sub-banner */}
         <GoldRibbon
           text="Annual Staff get together of North Western II region"
-          subtext="Lotus Ballroom • Golden Cassandra • Kurunegala"
         />
 
         {/* Key Event Badges */}
@@ -103,10 +102,6 @@ export default function HeroSection({ onOpenRsvp, onScrollToVideo, onScrollToDet
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 border border-[#d4af37]/30">
             <Clock className="w-3.5 h-3.5 text-[#d4af37]" />
             <span>6:00 PM Onwards</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 border border-[#d4af37]/30">
-            <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
-            <span>Lotus Ballroom, Kurunegala</span>
           </div>
         </div>
 

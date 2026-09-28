@@ -98,7 +98,7 @@ export default function InvitationVideoSection({
               <Film className="w-3.5 h-3.5" /> 4K Ultra Cinematic Preview
             </span>
             <span className="font-sans-modern tracking-wider text-neutral-400">
-              Lotus Ballroom • 14.11.2026
+              Asliya Golden Cassandra • 14.11.2026
             </span>
           </div>
         </div>
@@ -165,7 +165,7 @@ export default function InvitationVideoSection({
                 <p className="font-cinzel text-sm text-[#f5d77f]">
                   North Western II Region • Annual Staff Get Together
                 </p>
-                <p className="text-neutral-400">14 November 2026 • Lotus Ballroom, Golden Cassandra</p>
+                <p className="text-neutral-400">14 November 2026 • Asliya Golden Cassandra</p>
               </div>
               <button
                 onClick={handleCloseModal}

@@ -12,7 +12,7 @@ export default function LocationSection() {
       <div className="text-center">
         <OrnamentalSectionDivider title="LOCATION" />
         <h2 className="font-cinzel text-3xl sm:text-4xl font-bold text-gold-shimmer mb-2">
-          The Lotus Ballroom
+          The Venue
         </h2>
         <p className="text-xs sm:text-sm text-neutral-400 font-sans-modern max-w-md mx-auto">
           Asliya, Golden Cassandra • Dambokka, Kurunegala
@@ -27,7 +27,7 @@ export default function LocationSection() {
             <div className="relative rounded-2xl overflow-hidden border border-[#d4af37]/40 aspect-[16/10] sm:aspect-[16/9] shadow-inner bg-neutral-900 group">
               {/* Google Map iframe */}
               <iframe
-                title="Lotus Ballroom Golden Cassandra Kurunegala Location Map"
+                title="Asliya Golden Cassandra Kurunegala Location Map"
                 src={embedMapUrl}
                 width="100%"
                 height="100%"
@@ -41,7 +41,7 @@ export default function LocationSection() {
               {/* Gold Pin Badge Overlay */}
               <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/85 border border-[#d4af37]/60 backdrop-blur-md text-xs text-[#fae596] shadow-lg pointer-events-none">
                 <MapPin className="w-3.5 h-3.5 text-[#d4af37] fill-[#d4af37]" />
-                <span className="font-cinzel font-semibold">Lotus Ballroom</span>
+                <span className="font-cinzel font-semibold">The Venue</span>
               </div>
 
               {/* Interactive Direct Map Link Overlay Button on Hover */}
@@ -68,7 +68,7 @@ export default function LocationSection() {
               </div>
 
               <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-white mb-2">
-                Lotus Ballroom
+                Asliya Golden
               </h3>
               <p className="text-sm text-[#e6d5b8] font-sans-modern leading-relaxed">
                 Asliya, Golden Cassandra,

@@ -265,7 +265,7 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
                 </div>
                 <div>
                   <span className="text-[10px] text-neutral-400 uppercase font-cinzel">Venue</span>
-                  <p className="text-white font-semibold">Lotus Ballroom, Kurunegala</p>
+                  <p className="text-white font-semibold">Asliya Golden, Kurunegala</p>
                 </div>
                 <div>
                   <span className="text-[10px] text-neutral-400 uppercase font-cinzel">Seating</span>

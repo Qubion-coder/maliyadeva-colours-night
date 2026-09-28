@@ -12,10 +12,10 @@ export default function CelebrationSection() {
         {/* Ambient Golden Ribbons & Lights */}
         <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-32 bg-[#d4af37]/20 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-8 items-center">
           {/* Left: Dancing Couple Silhouette SVG */}
-          <div className="md:col-span-3 flex justify-center md:justify-start order-2 md:order-1">
-            <div className="relative w-36 sm:w-44 md:w-48 aspect-square flex items-center justify-center">
+          <div className="col-span-1 md:col-span-3 flex justify-center md:justify-start order-2 md:order-1">
+            <div className="relative w-32 sm:w-44 md:w-48 aspect-square flex items-center justify-center">
               {/* Golden Confetti Particles surrounding couple */}
               <div className="absolute inset-0 pointer-events-none">
                 <span className="absolute top-2 left-6 w-1.5 h-1.5 rounded-full bg-[#fae596] animate-pulse"></span>
@@ -34,7 +34,7 @@ export default function CelebrationSection() {
           </div>
 
           {/* Center: Main Textual Message */}
-          <div className="md:col-span-6 text-center order-1 md:order-2">
+          <div className="col-span-2 md:col-span-6 text-center order-1 md:order-2 mb-6 md:mb-0">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#d4af37]/15 border border-[#d4af37]/40 mb-4">
               <Sparkles className="w-3.5 h-3.5 text-[#f5d77f]" />
               <span className="text-[11px] font-cinzel font-semibold tracking-[0.25em] text-[#fae596] uppercase">
@@ -58,8 +58,8 @@ export default function CelebrationSection() {
           </div>
 
           {/* Right: Clinking Champagne Glasses SVG */}
-          <div className="md:col-span-3 flex justify-center md:justify-end order-3">
-            <div className="relative w-36 sm:w-44 md:w-48 aspect-square flex items-center justify-center">
+          <div className="col-span-1 md:col-span-3 flex justify-center md:justify-end order-3">
+            <div className="relative w-32 sm:w-44 md:w-48 aspect-square flex items-center justify-center">
               {/* Sparkle bursts around champagne */}
               <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-12 flex items-center justify-center">
                 <span className="w-2.5 h-2.5 bg-[#fff8db] rounded-full animate-ping duration-700" />
