@@ -11,7 +11,7 @@ interface RsvpModalProps {
 export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
   const [formData, setFormData] = useState<RsvpFormData>({
     fullName: '',
-    department: 'North Western II Region - Kurunegala',
+    department: '',
     staffId: '',
     phone: '',
     attending: 'yes',
@@ -108,30 +108,21 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
                 </div>
               </div>
 
-              {/* Department / Branch */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-cinzel tracking-wider text-[#e6d5b8] mb-1.5 uppercase">
-                    Branch / Dept
-                  </label>
+
+              {/* Branch */}
+              <div>
+                <label className="block text-xs font-cinzel tracking-wider text-[#e6d5b8] mb-1.5 uppercase">
+                  Branch *
+                </label>
+                <div className="relative">
+                  <Building className="w-4 h-4 text-[#d4af37] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
-                    placeholder="e.g. Kurunegala Branch"
+                    required
+                    placeholder="e.g. Kurunegala"
                     value={formData.department}
                     onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-900 border border-[#d4af37]/30 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-[#ffd700] transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-cinzel tracking-wider text-[#e6d5b8] mb-1.5 uppercase">
-                    EPF / Staff ID
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. NW-4820"
-                    value={formData.staffId}
-                    onChange={(e) => setFormData({ ...formData, staffId: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-neutral-900 border border-[#d4af37]/30 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-[#ffd700] transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-neutral-900 border border-[#d4af37]/30 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-[#ffd700] transition-colors"
                   />
                 </div>
               </div>
@@ -254,7 +245,7 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
                   {submittedPass.guestName}
                 </h4>
                 <p className="text-xs text-[#e6d5b8]">
-                  {submittedPass.department} • Staff ID: {submittedPass.staffId}
+                  {submittedPass.department}
                 </p>
               </div>
 

@@ -68,11 +68,9 @@ export default function LocationSection() {
               </div>
 
               <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-white mb-2">
-                Asliya Golden
+                Asliya Golden Cassandra
               </h3>
               <p className="text-sm text-[#e6d5b8] font-sans-modern leading-relaxed">
-                Asliya, Golden Cassandra,
-                <br />
                 Dambokka, Kurunegala,
                 <br />
                 Sri Lanka

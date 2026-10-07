@@ -90,7 +90,13 @@ export default function HeroSection({ onOpenRsvp, onScrollToVideo, onScrollToDet
 
         {/* Ribbon / Sub-banner */}
         <GoldRibbon
-          text="Annual Staff get together of North Western II region"
+          text={
+            <>
+              Annual <br />
+              Staff get together of <br />
+              North Western II region
+            </>
+          }
         />
 
         {/* Key Event Badges */}
@@ -102,6 +108,10 @@ export default function HeroSection({ onOpenRsvp, onScrollToVideo, onScrollToDet
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 border border-[#d4af37]/30">
             <Clock className="w-3.5 h-3.5 text-[#d4af37]" />
             <span>6:00 PM Onwards</span>
+          </div>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 border border-[#d4af37]/30">
+            <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
+            <span>Asliya Golden Cassandra, Kurunegala</span>
           </div>
         </div>
 

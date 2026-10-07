@@ -76,7 +76,7 @@ export function OrnamentalSectionDivider({ title }: { title: string }) {
   );
 }
 
-export function GoldRibbon({ text, subtext }: { text: string; subtext?: string }) {
+export function GoldRibbon({ text, subtext }: { text: React.ReactNode; subtext?: React.ReactNode }) {
   return (
     <div className="relative inline-flex items-center justify-center px-8 sm:px-14 py-2.5 my-3">
       {/* Ribbon tails */}

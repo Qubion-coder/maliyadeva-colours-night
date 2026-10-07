@@ -68,8 +68,8 @@ export default function EventDetailsSection() {
         </p>
       </div>
 
-      {/* Four Information Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 mt-10">
+      {/* Three Information Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-10">
         {/* CARD 1: DATE */}
         <div
           id="detail-card-date"
@@ -197,36 +197,6 @@ export default function EventDetailsSection() {
           </div>
         </div>
 
-        {/* CARD 4: ORGANIZED BY */}
-        <div
-          id="detail-card-organizer"
-          className="group relative rounded-2xl p-6 bg-dark-card border border-gold-subtle hover:border-[#ffd700]/70 hover:border-gold-glow transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-        >
-          <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-[#d4af37]/15 to-transparent rounded-tr-2xl pointer-events-none" />
-
-          <div>
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2a2414] to-[#120f06] border border-[#d4af37]/40 flex items-center justify-center text-[#f5d77f] mb-5 group-hover:scale-110 transition-transform duration-300 shadow-md">
-              <Users className="w-6 h-6 stroke-[1.5]" />
-            </div>
-
-            <p className="font-cinzel text-xs tracking-[0.25em] text-[#d4af37] uppercase font-bold mb-2">
-              ORGANIZED BY
-            </p>
-
-            <h3 className="font-cinzel text-xl font-bold text-[#fcfaf5] tracking-wide mb-1">
-              North Western II
-            </h3>
-            <p className="font-serif-luxury italic text-lg text-[#e6d5b8]">
-              Region
-            </p>
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-[#d4af37]/20">
-            <span className="text-[11px] font-sans-modern text-neutral-400">
-              LOLC Finance Regional Welfare & Staff Committee
-            </span>
-          </div>
-        </div>
       </div>
     </section>
   );

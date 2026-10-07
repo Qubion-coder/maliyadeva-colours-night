@@ -20,30 +20,9 @@ export default function DressCodeSection() {
         </p>
 
         {/* Dress Code Title */}
-        <h3 className="font-cinzel text-3xl sm:text-4xl font-bold text-gold-shimmer tracking-wide my-2">
-          Smart Casual
+        <h3 className="font-cinzel text-3xl sm:text-4xl font-bold text-gold-shimmer tracking-wide my-2 mb-4">
+          Smart Casual Only
         </h3>
-
-        {/* Style recommendation */}
-        <p className="font-serif-luxury italic text-base sm:text-lg text-[#e6d5b8] max-w-md mx-auto mb-5">
-          "Elegance with a touch of glamour — Black, Gold, or sophisticated evening shades are cordially encouraged."
-        </p>
-
-        {/* Style Guidelines Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-sans-modern text-[#f3e5ab]">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-[#d4af37]/30">
-            <CheckCircle2 className="w-3 h-3 text-[#d4af37]" />
-            Blazers & Tailored Trousers
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-[#d4af37]/30">
-            <CheckCircle2 className="w-3 h-3 text-[#d4af37]" />
-            Cocktail & Evening Dresses
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-[#d4af37]/30">
-            <CheckCircle2 className="w-3 h-3 text-[#d4af37]" />
-            Smart Collared Shirts
-          </span>
-        </div>
       </div>
     </section>
   );

@@ -40,10 +40,7 @@ export default function ClosingSection({ onScrollToTop }: ClosingSectionProps) {
           TO CELEBRATING WITH YOU!
         </h3>
 
-        {/* Script subtitle matching reference "We look forward to celebrating with you!" */}
-        <p className="font-script text-3xl sm:text-4xl text-[#fae596] my-2 select-none">
-          We look forward to celebrating with you!
-        </p>
+
 
         {/* Gold ornamental lines and small gold heart detail */}
         <div className="flex items-center justify-center gap-4 my-6">
@@ -62,9 +59,22 @@ export default function ClosingSection({ onScrollToTop }: ClosingSectionProps) {
 
       {/* Brand & Region Signature */}
       <div className="pt-8 border-t border-[#d4af37]/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans-modern text-neutral-500">
-        <p>
-          LOLC Finance • North Western II Region • Annual Staff Get Together 2026
-        </p>
+        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+          <p>
+            LOLC Finance • North Western II Region • Annual Staff Get Together 2026
+          </p>
+          <p className="text-[#c2ad82] text-[11px] tracking-wider font-sans-modern mt-2">
+            Want an invitation like this? Create yours with{' '}
+            <a 
+              target="_blank" 
+              rel="noreferrer" 
+              className="text-[#d4af37] hover:text-white transition-colors underline underline-offset-2 font-bold" 
+              href="https://wa.me/94707819074"
+            >
+              invitemint
+            </a>
+          </p>
+        </div>
 
         <button
           onClick={onScrollToTop}
