@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, Sparkles, Download, Phone, User, Building, QrCode } from 'lucide-react';
+import { X, CheckCircle, Sparkles, Phone, User, Building } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { RsvpFormData, VipPass } from '../types';
+import { RsvpFormData } from '../types';
 
 interface RsvpModalProps {
   isOpen: boolean;
@@ -12,50 +12,63 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
   const [formData, setFormData] = useState<RsvpFormData>({
     fullName: '',
     department: '',
-    staffId: '',
     phone: '',
     attending: 'yes',
     dietary: 'standard',
-    notes: '',
   });
 
-  const [submittedPass, setSubmittedPass] = useState<VipPass | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.fullName.trim()) return;
+    if (!formData.fullName.trim() || isSubmitting) return;
 
-    // Generate unique VIP ticket pass ID
-    const randomPassId = `BN-${Math.floor(100000 + Math.random() * 900000)}`;
-    const newPass: VipPass = {
-      id: randomPassId,
-      guestName: formData.fullName,
-      department: formData.department || 'North Western II Region',
-      staffId: formData.staffId || 'STAFF',
-      timestamp: new Date().toLocaleDateString('en-GB'),
-      dietary: formData.dietary.toUpperCase(),
-      tableZone: `GOLDEN ZONE - TABLE ${Math.floor(1 + Math.random() * 15)}`,
-    };
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      const scriptUrl =
+        'https://script.google.com/macros/s/AKfycbyYmA37U1_fjTdyLirO-oe75enhyNW9GW9eCaRftZGXUcS1ekWxDPnyPZUbrBWgX0gkSg/exec';
 
-    setSubmittedPass(newPass);
+      // text/plain avoids a CORS preflight, which Apps Script does not support
+      const res = await fetch(scriptUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          fullName: formData.fullName.trim(),
+          branch: formData.department.trim(),
+          phone: formData.phone.trim(),
+          attending: formData.attending,
+          dietary: formData.dietary,
+        }),
+      });
+      const result = await res.json();
+      if (!result.ok) throw new Error(result.error || 'Submission failed');
+    } catch (err) {
+      console.error('RSVP submission failed', err);
+      setSubmitError('Could not save your RSVP. Please check your connection and try again.');
+      setIsSubmitting(false);
+      return;
+    }
+    setIsSubmitting(false);
+    setIsSubmitted(true);
 
     // Launch celebratory luxury gold confetti
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#FFE898', '#D4AF37', '#AA771C', '#FFFFFF'],
-      });
-    } catch {
-      // safe fallback
+    if (formData.attending === 'yes') {
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#FFE898', '#D4AF37', '#AA771C', '#FFFFFF'],
+        });
+      } catch {
+        // safe fallback
+      }
     }
-  };
-
-  const handlePrintPass = () => {
-    window.print();
   };
 
   return (
@@ -74,7 +87,7 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
           <X className="w-5 h-5" />
         </button>
 
-        {!submittedPass ? (
+        {!isSubmitted ? (
           /* RSVP Form */
           <div className="p-6 sm:p-8">
             <div className="text-center mb-6">
@@ -203,108 +216,45 @@ export default function RsvpModal({ isOpen, onClose }: RsvpModalProps) {
 
               {/* Submit CTA */}
               <div className="pt-3">
+                {submitError && (
+                  <p className="mb-3 text-xs text-red-400 text-center font-sans-modern">{submitError}</p>
+                )}
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-[#120f04] font-cinzel text-xs sm:text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300 gold-button-glow flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-[#120f04] font-cinzel text-xs sm:text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300 gold-button-glow flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-wait"
                 >
-                  <Sparkles className="w-4 h-4 text-[#120f04]" />
-                  <span>Submit RSVP Confirmation</span>
+                  <Sparkles className={`w-4 h-4 text-[#120f04] ${isSubmitting ? 'animate-spin' : ''}`} />
+                  <span>{isSubmitting ? 'Saving RSVP…' : 'Submit RSVP Confirmation'}</span>
                 </button>
               </div>
             </form>
           </div>
         ) : (
-          /* Personalized VIP Digital Pass */
-          <div className="p-6 sm:p-8 text-center animate-fadeIn">
-            <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-[#d4af37]/20 border border-[#ffd700] flex items-center justify-center text-[#ffd700]">
-              <CheckCircle className="w-8 h-8" />
+          /* Thank You Message */
+          <div className="p-8 sm:p-10 text-center animate-fadeIn">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#d4af37]/20 border border-[#ffd700] flex items-center justify-center text-[#ffd700]">
+              <CheckCircle className="w-9 h-9" />
             </div>
 
             <span className="font-cinzel text-xs tracking-[0.25em] text-[#d4af37] uppercase font-bold">
-              RSVP Confirmed
+              RSVP Received
             </span>
-            <h3 className="font-cinzel text-2xl font-bold text-gold-shimmer my-1">
-              Your VIP Digital Pass
+            <h3 className="font-cinzel text-2xl sm:text-3xl font-bold text-gold-shimmer my-2">
+              Thank You, {formData.fullName.trim().split(' ')[0]}!
             </h3>
-            <p className="text-xs text-neutral-400 font-sans-modern mb-6">
-              Please present this pass or state your name at the registration desk
+            <p className="text-sm text-neutral-300 font-sans-modern leading-relaxed">
+              {formData.attending === 'yes'
+                ? "Your attendance has been confirmed. We look forward to celebrating with you at Billionaire's Night."
+                : "We're sorry you can't make it. Thank you for letting us know — you'll be missed!"}
             </p>
 
-            {/* Ticket Card */}
-            <div className="relative rounded-2xl p-6 bg-gradient-to-b from-[#1c1810] via-[#0d0c0a] to-[#050505] border-2 border-[#d4af37] text-left shadow-2xl overflow-hidden">
-              {/* Corner Watermark */}
-              <div className="absolute top-2 right-3 font-cinzel text-[10px] tracking-widest text-[#d4af37] font-bold">
-                VIP PASS #{submittedPass.id}
-              </div>
-
-              <div className="mb-4">
-                <p className="font-cinzel text-[10px] tracking-[0.2em] text-[#aa771c] uppercase">
-                  Billionaire's Night 2026
-                </p>
-                <h4 className="font-cinzel text-xl font-bold text-white uppercase tracking-wider">
-                  {submittedPass.guestName}
-                </h4>
-                <p className="text-xs text-[#e6d5b8]">
-                  {submittedPass.department}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 py-3 border-y border-[#d4af37]/30 text-xs">
-                <div>
-                  <span className="text-[10px] text-neutral-400 uppercase font-cinzel">Date & Time</span>
-                  <p className="text-white font-semibold">14 Nov 2026 • 6:00 PM</p>
-                </div>
-                <div>
-                  <span className="text-[10px] text-neutral-400 uppercase font-cinzel">Venue</span>
-                  <p className="text-white font-semibold">Asliya Golden, Kurunegala</p>
-                </div>
-                <div>
-                  <span className="text-[10px] text-neutral-400 uppercase font-cinzel">Seating</span>
-                  <p className="text-[#ffd700] font-semibold">{submittedPass.tableZone}</p>
-                </div>
-                <div>
-                  <span className="text-[10px] text-neutral-400 uppercase font-cinzel">Menu Choice</span>
-                  <p className="text-white font-semibold">{submittedPass.dietary}</p>
-                </div>
-              </div>
-
-              {/* QR Code Simulation */}
-              <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-12 h-12 bg-white p-1 rounded-md">
-                    <svg viewBox="0 0 24 24" className="w-full h-full text-black fill-current">
-                      <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h4v2h-4v-2zm-4 0h2v4h-2v-4zm2 4h4v2h-4v-2zm2-2h2v2h-2v-2z" />
-                    </svg>
-                  </div>
-                  <div className="text-[10px] text-neutral-400">
-                    <p className="font-semibold text-[#f5d77f]">Authorized Entry</p>
-                    <p>North Western II Region</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="inline-block px-2.5 py-1 rounded bg-[#d4af37]/20 border border-[#d4af37]/40 text-[#fae596] text-[10px] font-cinzel font-bold">
-                    VALIDATED
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center justify-center gap-3 mt-6">
-              <button
-                onClick={handlePrintPass}
-                className="px-5 py-2.5 rounded-full bg-neutral-900 border border-[#d4af37]/50 hover:border-[#ffd700] text-xs font-cinzel text-[#fae596] flex items-center gap-2 transition-colors"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Save / Print Pass</span>
-              </button>
-              <button
-                onClick={onClose}
-                className="px-6 py-2.5 rounded-full bg-gold-gradient text-black text-xs font-cinzel font-bold uppercase tracking-wider hover:bg-gold-gradient-hover transition-colors"
-              >
-                Done
-              </button>
-            </div>
+            <button
+              onClick={onClose}
+              className="mt-8 px-8 py-2.5 rounded-full bg-gold-gradient text-black text-xs font-cinzel font-bold uppercase tracking-wider hover:bg-gold-gradient-hover transition-colors"
+            >
+              Close
+            </button>
           </div>
         )}
       </div>
