@@ -177,7 +177,7 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
                     {/* Ornate gold button */}
                     <button
                       onClick={openInvitation}
-                      className="group relative mt-[clamp(14px,3.5svh,34px)] flex items-center justify-center"
+                      className="group relative mt-[clamp(32px,10svh,100px)] flex items-center justify-center"
                     >
                       <span className="absolute -left-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
                       <span className="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
