@@ -54,7 +54,6 @@ export default function App() {
         <IntroVideo
           key={introKey}
           onFinish={handleIntroFinish}
-          onStart={startMusic}
           isMusicPlaying={isMusicPlaying}
           onToggleMusic={handleToggleMusic}
         />
