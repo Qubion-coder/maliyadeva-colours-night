@@ -4,7 +4,7 @@ html,
 body,
 #root {
   min-height: 100%;
-  background: #050507;
+  background: #07060a;
 }
 
 html {
@@ -152,4 +152,12 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #463b20;
+}
+
+/* Maroon · Gold · Blue school-colour rule */
+.tricolour-rule {
+  height: 2px;
+  margin-left: auto;
+  margin-right: auto;
+  background: linear-gradient(90deg, transparent 0%, #9b1b30 18%, #9b1b30 36%, #d4af37 42%, #fff1b8 50%, #d4af37 58%, #1e3a8a 64%, #1e3a8a 82%, transparent 100%);
 }

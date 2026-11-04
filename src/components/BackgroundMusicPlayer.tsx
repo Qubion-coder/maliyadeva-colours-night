@@ -13,9 +13,10 @@ export class LuxuryAudioEngine {
 
   public init() {
     if (!this.audio) {
-      this.audio = new Audio('/[HQ] - I Believe (Instrumental) - CTV Olympics theme.mp3');
+      this.audio = new Audio('/song.mp3');
       this.audio.loop = true;
-      this.audio.volume = 0.5;
+      this.audio.volume = 0.6;
+      this.audio.preload = 'auto';
     }
   }
 

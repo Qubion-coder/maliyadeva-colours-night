@@ -1,89 +1,42 @@
-import React, { useState } from 'react';
-import { Heart, Share2, Copy, Check, ArrowUp, Sparkles, MessageCircle } from 'lucide-react';
-import { CrownFlourish } from './OrnamentalDivider';
+import { motion } from 'motion/react';
+import { Play } from 'lucide-react';
+import Crest from './Crest';
 
 interface ClosingSectionProps {
-  onScrollToTop: () => void;
+  onReplayIntro: () => void;
 }
 
-export default function ClosingSection({ onScrollToTop }: ClosingSectionProps) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleShareWhatsApp = () => {
-    const text = encodeURIComponent(
-      "👑 You are cordially invited to BILLIONAIRE'S NIGHT 2026 - Annual Staff Get Together of North Western II Region!\n\n📅 Date: 14 November 2026 (6:00 PM onwards)\n📍 Venue: Asliya Golden Cassandra, Kurunegala\n\nOpen your VIP digital invitation here:\n" +
-        window.location.href
-    );
-    window.open(`https://wa.me/?text=${text}`, '_blank');
-  };
-
+export default function ClosingSection({ onReplayIntro }: ClosingSectionProps) {
   return (
-    <footer className="relative py-16 px-4 max-w-4xl mx-auto text-center z-10 border-t border-[#d4af37]/20">
-      {/* Background Soft Glow */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-72 h-36 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none -z-10" />
-
-
-
-      {/* Main Closing Calligraphy Statement */}
-      <div className="my-8">
-        <CrownFlourish className="w-8 h-8 mx-auto mb-3 opacity-80" />
-
-        <h3 className="font-cinzel text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.18em] text-gold-shimmer uppercase mb-2">
-          WE LOOK FORWARD
-          <br />
-          TO CELEBRATING WITH YOU!
-        </h3>
-
-
-
-        {/* Gold ornamental lines and small gold heart detail */}
-        <div className="flex items-center justify-center gap-4 my-6">
-          <div className="h-[1px] w-16 sm:w-28 bg-gradient-to-r from-transparent to-[#d4af37]"></div>
-          <div className="flex items-center gap-2 text-[#d4af37]">
-            <Heart className="w-4 h-4 fill-[#d4af37] text-[#d4af37] animate-pulse" />
-          </div>
-          <div className="h-[1px] w-16 sm:w-28 bg-gradient-to-l from-transparent to-[#d4af37]"></div>
-        </div>
-
-        {/* Date numeral */}
-        <p className="font-cinzel text-lg sm:text-xl font-bold tracking-[0.35em] text-gold-gradient">
-          14 • 11 • 2026
+    <section className="relative py-20 sm:py-28 px-4 text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 1 }}
+        className="flex flex-col items-center"
+      >
+        <p className="font-script text-4xl sm:text-5xl text-gold-subtle">Your presence is our honour</p>
+        <p className="mt-5 max-w-md font-serif-luxury text-lg text-[#d8ccb4] leading-relaxed">
+          Join us as we celebrate the students who carried the colours of Maliyadeva with pride.
         </p>
-      </div>
-
-      {/* Brand & Region Signature */}
-      <div className="pt-8 border-t border-[#d4af37]/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans-modern text-neutral-500">
-        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-          <p>
-            LOLC Finance • North Western II Region • Annual Staff Get Together 2026
-          </p>
-          <p className="text-[#c2ad82] text-[11px] tracking-wider font-sans-modern mt-2">
-            Want an invitation like this? Create yours with{' '}
-            <a 
-              target="_blank" 
-              rel="noreferrer" 
-              className="text-[#d4af37] hover:text-white transition-colors underline underline-offset-2 font-bold" 
-              href="https://wa.me/94707819074"
-            >
-              invitemint
-            </a>
-          </p>
-        </div>
 
         <button
-          onClick={onScrollToTop}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 border border-[#d4af37]/30 text-neutral-400 hover:text-[#fae596] hover:border-[#ffd700] transition-colors"
+          onClick={onReplayIntro}
+          className="mt-10 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-[#120f04] font-cinzel text-[11px] font-bold tracking-[0.25em] uppercase gold-button-glow transition-transform hover:-translate-y-0.5"
         >
-          <ArrowUp className="w-3.5 h-3.5" />
-          <span className="text-[11px] font-cinzel">Back to Top</span>
+          <Play className="w-3.5 h-3.5 fill-current" />
+          Replay Intro
         </button>
-      </div>
-    </footer>
+
+        <div className="mt-16 flex flex-col items-center gap-3 opacity-80">
+          <Crest className="w-14 h-16" />
+          <div className="tricolour-rule w-24" />
+          <p className="font-cinzel text-[10px] tracking-[0.4em] uppercase text-[#a88a44]">
+            02 · 12 · 2026 &nbsp;|&nbsp; Maliyadeva College
+          </p>
+        </div>
+      </motion.div>
+    </section>
   );
 }
