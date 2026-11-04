@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Play, SkipForward, Volume2, VolumeX } from 'lucide-react';
+import { SkipForward, Volume2, VolumeX } from 'lucide-react';
 import Crest from './Crest';
 
 interface IntroVideoProps {
@@ -16,13 +16,11 @@ interface IntroVideoProps {
  * 1. Gate screen with "Open Invitation" (the video preloads behind it).
  * 2. The tap plays the muted intro video at once; the same tap also unlocks
  *    the background song (see App).
- * If the browser still blocks playback (e.g. iOS Low Power Mode), a play
- * button is shown. On end / skip the overlay fades to reveal the invitation.
+ * It retries silently until playback starts. On end / skip the overlay fades to reveal the invitation.
  */
 export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggleMusic }: IntroVideoProps) {
   const [visible, setVisible] = useState(true);
   const [gate, setGate] = useState(true);
-  const [blocked, setBlocked] = useState(false);
   const [started, setStarted] = useState(false);
   const [progress, setProgress] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -36,20 +34,17 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
     };
   }, []);
 
-  const tryPlay = async () => {
+  const wantPlay = useRef(false);
+
+  const tryPlay = () => {
     const v = videoRef.current;
-    if (!v) return;
+    if (!v || !v.paused) return;
     // iOS needs the muted *attribute* (React only sets the property)
     v.muted = true;
     v.defaultMuted = true;
     v.setAttribute('muted', '');
     v.setAttribute('playsinline', '');
-    try {
-      await v.play();
-      setBlocked(false);
-    } catch {
-      setBlocked(true);
-    }
+    v.play().catch(() => {});
   };
 
   // Make sure the video is downloading while the guest is on the gate screen
@@ -61,15 +56,24 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
     v.load();
   }, []);
 
-  // "Open Invitation" tap → play the intro right away (inside the tap gesture)
+  // After "Open Invitation": keep retrying quietly until the video runs.
+  // If it never starts (very slow network), go straight to the invitation.
+  useEffect(() => {
+    if (gate || started) return;
+    const retry = setInterval(tryPlay, 1000);
+    const giveUp = setTimeout(() => finish(), 15000);
+    return () => {
+      clearInterval(retry);
+      clearTimeout(giveUp);
+    };
+  }, [gate, started]);
+
+  // "Open Invitation" tap → song + intro video start right away (inside the tap)
   const openInvitation = () => {
     onStart();
-    setGate(false);
+    wantPlay.current = true;
     tryPlay();
-    setTimeout(() => {
-      const v = videoRef.current;
-      if (v && (v.paused || v.currentTime === 0)) setBlocked(true);
-    }, 4000);
+    setGate(false);
   };
 
   const finish = () => {
@@ -83,6 +87,7 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
         <motion.div
           key="intro"
           className="fixed inset-0 z-[100] bg-black overflow-hidden"
+          onClick={() => wantPlay.current && tryPlay()}
           exit={{ opacity: 0, scale: 1.04, filter: 'blur(6px)' }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
@@ -100,10 +105,8 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
             muted
             playsInline
             preload="auto"
-            onPlaying={() => {
-              setStarted(true);
-              setBlocked(false);
-            }}
+            onPlaying={() => setStarted(true)}
+            onCanPlay={() => wantPlay.current && tryPlay()}
             onTimeUpdate={(e) => {
               const v = e.currentTarget;
               if (v.duration) setProgress(v.currentTime / v.duration);
@@ -161,25 +164,10 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
           </AnimatePresence>
 
           {/* Loading spinner before first frame plays */}
-          {!gate && !started && !blocked && (
+          {!gate && !started && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-10 h-10 rounded-full border-2 border-[#d4af37]/25 border-t-[#d4af37] animate-spin" />
             </div>
-          )}
-
-          {/* Fallback play button if the browser blocked autoplay */}
-          {blocked && (
-            <button
-              onClick={tryPlay}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/40"
-            >
-              <span className="w-20 h-20 rounded-full bg-gold-gradient gold-button-glow flex items-center justify-center">
-                <Play className="w-8 h-8 text-[#120f04] fill-current ml-1" />
-              </span>
-              <span className="font-cinzel text-xs tracking-[0.3em] uppercase text-[#fae596]">
-                Play Intro
-              </span>
-            </button>
           )}
 
           {!gate && (<>
