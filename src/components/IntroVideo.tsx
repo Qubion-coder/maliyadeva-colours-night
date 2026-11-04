@@ -5,6 +5,8 @@ import Crest from './Crest';
 
 interface IntroVideoProps {
   onFinish: () => void;
+  /** Starts the background song — called directly inside the tap. */
+  onStart: () => void;
   isMusicPlaying: boolean;
   onToggleMusic: () => void;
 }
@@ -17,7 +19,7 @@ interface IntroVideoProps {
  * If the browser still blocks playback (e.g. iOS Low Power Mode), a play
  * button is shown. On end / skip the overlay fades to reveal the invitation.
  */
-export default function IntroVideo({ onFinish, isMusicPlaying, onToggleMusic }: IntroVideoProps) {
+export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggleMusic }: IntroVideoProps) {
   const [visible, setVisible] = useState(true);
   const [gate, setGate] = useState(true);
   const [blocked, setBlocked] = useState(false);
@@ -61,6 +63,7 @@ export default function IntroVideo({ onFinish, isMusicPlaying, onToggleMusic }: 
 
   // "Open Invitation" tap → play the intro right away (inside the tap gesture)
   const openInvitation = () => {
+    onStart();
     setGate(false);
     tryPlay();
     setTimeout(() => {

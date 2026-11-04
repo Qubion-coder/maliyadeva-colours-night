@@ -25,14 +25,17 @@ export default function App() {
     startMusic();
     const onFirst = () => {
       startMusic();
-      window.removeEventListener('pointerdown', onFirst);
+      window.removeEventListener('click', onFirst);
       window.removeEventListener('keydown', onFirst);
+      window.removeEventListener('touchend', onFirst);
     };
-    window.addEventListener('pointerdown', onFirst);
+    window.addEventListener('click', onFirst);
     window.addEventListener('keydown', onFirst);
+    window.addEventListener('touchend', onFirst);
     return () => {
-      window.removeEventListener('pointerdown', onFirst);
+      window.removeEventListener('click', onFirst);
       window.removeEventListener('keydown', onFirst);
+      window.removeEventListener('touchend', onFirst);
     };
   }, []);
 
@@ -54,6 +57,7 @@ export default function App() {
         <IntroVideo
           key={introKey}
           onFinish={handleIntroFinish}
+          onStart={startMusic}
           isMusicPlaying={isMusicPlaying}
           onToggleMusic={handleToggleMusic}
         />
