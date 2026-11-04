@@ -181,23 +181,16 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
                     >
                       <span className="absolute -left-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
                       <span className="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
-                      <span className="relative flex items-center gap-3 px-6 sm:px-10 py-[clamp(9px,1.5svh,15px)] rounded-full p-[1.5px] bg-gold-gradient animate-gate-glow">
+                      <span className="relative flex items-center whitespace-nowrap gap-3 px-6 sm:px-10 py-[clamp(9px,1.5svh,15px)] rounded-full p-[1.5px] bg-gold-gradient animate-gate-glow">
                         <span className="absolute inset-[2px] rounded-full bg-[linear-gradient(180deg,#0d1a55,#050b2a)] group-hover:bg-[linear-gradient(180deg,#16297a,#0a1446)] transition-colors" />
                         <span className="relative w-1.5 h-1.5 rotate-45 bg-[#f5d77f]" />
-                        <span className="relative font-cinzel text-[min(3.6vw,15px)] sm:text-lg tracking-[0.2em] uppercase text-gold-gradient">
+                        <span className="relative font-cinzel whitespace-nowrap text-[min(3.6vw,15px)] sm:text-lg tracking-[0.2em] uppercase text-gold-gradient">
                           Open Invitation
                         </span>
                         <span className="relative w-1.5 h-1.5 rotate-45 bg-[#f5d77f]" />
                       </span>
                     </button>
 
-                    <div className="mt-[clamp(10px,2.2svh,20px)] flex items-center gap-3">
-                      <span className="h-px w-5 sm:w-8 bg-gradient-to-r from-transparent to-[#e8c15a]" />
-                      <p className="font-cinzel whitespace-nowrap text-[min(2.3vw,10px)] sm:text-[11px] tracking-[0.14em] sm:tracking-[0.22em] uppercase text-[#f3e5ab]">
-                        Sound on for the best experience
-                      </p>
-                      <span className="h-px w-5 sm:w-8 bg-gradient-to-l from-transparent to-[#e8c15a]" />
-                    </div>
                   </motion.div>
                 </div>
               </motion.div>
