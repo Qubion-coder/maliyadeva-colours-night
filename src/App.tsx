@@ -52,7 +52,7 @@ export default function App() {
   const handleToggleMusic = () => setIsMusicPlaying(luxuryAudio.toggle());
 
   return (
-    <div className="relative min-h-screen bg-[#07060a] text-[#f4efe6] font-sans-modern overflow-x-hidden selection:bg-[#d4af37]/30 selection:text-[#fae596]">
+    <div className="relative min-h-screen bg-[#050b2a] text-[#f4efe6] font-sans-modern overflow-x-hidden selection:bg-[#d4af37]/30 selection:text-[#fae596]">
       {showIntro && (
         <IntroVideo
           key={introKey}
@@ -67,8 +67,10 @@ export default function App() {
 
       {/* Ambient light in the school colours */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/4 -left-48 w-[480px] h-[480px] rounded-full bg-[radial-gradient(closest-side,rgba(125,21,40,0.22),transparent)]" />
-        <div className="absolute top-1/2 -right-48 w-[480px] h-[480px] rounded-full bg-[radial-gradient(closest-side,rgba(27,52,120,0.25),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#14298a_0%,#0a1650_35%,#050b2a_75%)]" />
+        <div className="absolute top-1/3 -left-48 w-[520px] h-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(180,24,48,0.35),transparent)]" />
+        <div className="absolute top-2/3 -right-48 w-[520px] h-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(40,80,220,0.35),transparent)]" />
+        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-[radial-gradient(closest-side,rgba(212,175,55,0.14),transparent)]" />
       </div>
 
       <Navbar isMusicPlaying={isMusicPlaying} onToggleMusic={handleToggleMusic} />

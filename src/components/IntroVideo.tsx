@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { SkipForward, Volume2, VolumeX } from 'lucide-react';
-import Crest from './Crest';
 
 interface IntroVideoProps {
   onFinish: () => void;
@@ -119,46 +118,52 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
           {/* Soft vignette */}
           <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.7)_100%)]" />
 
-          {/* Gate screen: "Open Invitation" */}
+          {/* Gate screen: the designed invitation cover (public/gate.jpg) */}
           <AnimatePresence>
             {gate && (
               <motion.div
                 key="gate"
-                className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 bg-[#07060a]"
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6 }}
+                className="absolute inset-0 z-10 flex items-center justify-center bg-[#0a1140] overflow-hidden"
+                exit={{ opacity: 0, scale: 1.03 }}
+                transition={{ duration: 0.7 }}
               >
-                <div className="absolute inset-0 pointer-events-none">
-                  <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-[radial-gradient(closest-side,rgba(212,175,55,0.18),transparent)]" />
-                  <div className="absolute bottom-0 -left-32 w-96 h-96 bg-[radial-gradient(closest-side,rgba(155,27,48,0.25),transparent)]" />
-                  <div className="absolute bottom-0 -right-32 w-96 h-96 bg-[radial-gradient(closest-side,rgba(30,58,138,0.28),transparent)]" />
-                </div>
+                {/* Blurred colour fill for the space around the artwork */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-center bg-cover scale-125 blur-2xl opacity-70"
+                  style={{ backgroundImage: 'url(/gate.jpg)' }}
+                />
+
                 <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1.2, ease: 'easeOut' }}
-                  className="relative flex flex-col items-center"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1.1, ease: 'easeOut' }}
+                  className="relative z-[1] aspect-[853/1280] h-full max-h-full max-w-full shadow-[0_0_80px_rgba(0,0,0,0.6)]"
+                  style={{ maxWidth: 'min(100%, calc(100svh * 853 / 1280))' }}
                 >
-                  <Crest className="w-28 h-32 sm:w-36 sm:h-40 mb-6 drop-shadow-[0_8px_30px_rgba(212,175,55,0.35)]" />
-                  <p className="font-cinzel text-[11px] sm:text-xs tracking-[0.4em] uppercase text-[#c9b177] mb-3">
-                    Maliyadeva College
-                  </p>
-                  <h1 className="font-serif-luxury italic text-3xl sm:text-5xl text-gold-subtle leading-tight">
-                    An Invitation Awaits
-                  </h1>
-                  <div className="tricolour-rule w-40 mt-6 mb-10" />
+                  <img
+                    src="/gate.jpg"
+                    alt="Maliyadeva College — An Invitation Awaits"
+                    draggable={false}
+                    className="absolute inset-0 w-full h-full object-contain select-none"
+                  />
+
+                  {/* Tap area over the artwork's "Open Invitation" button */}
                   <button
                     onClick={openInvitation}
-                    className="group relative px-10 py-4 rounded-full border border-[#d4af37]/60 text-[#fae596] font-cinzel text-xs sm:text-sm tracking-[0.3em] uppercase overflow-hidden transition-colors hover:text-[#120f04]"
-                  >
-                    <span className="absolute inset-0 bg-gold-gradient translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-                    <span className="absolute inset-0 rounded-full animate-pulse-glow border border-[#d4af37]/30" />
-                    <span className="relative">Open Invitation</span>
-                  </button>
-                  <p className="mt-5 text-[10px] tracking-[0.25em] uppercase text-neutral-500 font-sans-modern">
-                    Sound on for the best experience
-                  </p>
+                    aria-label="Open Invitation"
+                    className="absolute left-[13%] top-[55.6%] w-[74%] h-[8%] rounded-full animate-gate-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fae596]"
+                  />
                 </motion.div>
+
+                {/* Tapping anywhere else on the cover opens it too */}
+                <button
+                  onClick={openInvitation}
+                  aria-hidden="true"
+                  tabIndex={-1}
+                  className="absolute inset-0 -z-0 cursor-pointer"
+                  style={{ zIndex: 0 }}
+                />
               </motion.div>
             )}
           </AnimatePresence>

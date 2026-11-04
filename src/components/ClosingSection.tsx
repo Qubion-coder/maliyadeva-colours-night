@@ -8,7 +8,7 @@ interface ClosingSectionProps {
 
 export default function ClosingSection({ onReplayIntro }: ClosingSectionProps) {
   return (
-    <section className="relative py-20 sm:py-28 px-4 text-center">
+    <section className="relative pt-20 sm:pt-28 px-4 text-center">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -37,6 +37,13 @@ export default function ClosingSection({ onReplayIntro }: ClosingSectionProps) {
           </p>
         </div>
       </motion.div>
+
+      {/* College at night with silk ribbons (from the cover artwork) */}
+      <img
+        src="/decor/campus.jpg"
+        alt="Maliyadeva College at night"
+        className="pointer-events-none select-none block w-[calc(100%+2rem)] -mx-4 mt-12 max-w-none sm:w-full sm:mx-auto sm:max-w-3xl [mask-image:linear-gradient(to_bottom,transparent_0%,black_30%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_30%)]"
+      />
     </section>
   );
 }

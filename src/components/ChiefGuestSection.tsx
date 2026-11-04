@@ -10,7 +10,7 @@ export default function ChiefGuestSection() {
         transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
         className="relative max-w-3xl mx-auto rounded-[28px] p-[1px] bg-[linear-gradient(135deg,rgba(212,175,55,0.7),rgba(125,21,40,0.5)_40%,rgba(27,52,120,0.5)_60%,rgba(212,175,55,0.7))]"
       >
-        <div className="relative rounded-[27px] bg-[#0b0a0d] px-6 py-14 sm:px-14 sm:py-16 text-center overflow-hidden">
+        <div className="relative rounded-[27px] bg-[linear-gradient(180deg,#0b1a5c_0%,#060d33_100%)] px-6 py-14 sm:px-14 sm:py-16 text-center overflow-hidden">
           {/* Corner glows in the school colours */}
           <div className="absolute -top-24 -left-24 w-64 h-64 rounded-full bg-[radial-gradient(closest-side,rgba(155,27,48,0.35),transparent)]" />
           <div className="absolute -bottom-24 -right-24 w-64 h-64 rounded-full bg-[radial-gradient(closest-side,rgba(30,58,138,0.4),transparent)]" />

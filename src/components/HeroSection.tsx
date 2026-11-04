@@ -34,6 +34,9 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-4 pt-24 pb-16">
+      {/* Silk ribbon corners (from the cover artwork) */}
+      <img src="/decor/ribbon-tl.jpg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute top-0 left-0 w-[48vw] max-w-[300px] -z-10 opacity-90 [mask-image:radial-gradient(ellipse_at_top_left,black_25%,transparent_70%)] [-webkit-mask-image:radial-gradient(ellipse_at_top_left,black_25%,transparent_70%)]" />
+      <img src="/decor/ribbon-tl.jpg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute top-0 right-0 w-[48vw] max-w-[300px] -z-10 opacity-90 -scale-x-100 [mask-image:radial-gradient(ellipse_at_top_left,black_25%,transparent_70%)] [-webkit-mask-image:radial-gradient(ellipse_at_top_left,black_25%,transparent_70%)]" />
       {/* Spotlight beam echoing the intro video */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(90vw,520px)] h-[80vh] pointer-events-none -z-10 bg-[linear-gradient(180deg,rgba(255,236,170,0.16),rgba(212,175,55,0.05)_55%,transparent)] [clip-path:polygon(42%_0,58%_0,100%_100%,0_100%)] blur-xl" />
 

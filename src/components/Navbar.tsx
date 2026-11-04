@@ -8,7 +8,7 @@ interface NavbarProps {
 
 export default function Navbar({ isMusicPlaying, onToggleMusic }: NavbarProps) {
   return (
-    <header className="fixed top-0 inset-x-0 z-40 backdrop-blur-xl bg-[#07060a]/60 border-b border-[#d4af37]/15">
+    <header className="fixed top-0 inset-x-0 z-40 backdrop-blur-xl bg-[#050b2a]/70 border-b border-[#d4af37]/15">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
