@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import Crest from './Crest';
 import { SkipForward, Volume2, VolumeX } from 'lucide-react';
 
 interface IntroVideoProps {
@@ -118,52 +119,87 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
           {/* Soft vignette */}
           <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.7)_100%)]" />
 
-          {/* Gate screen: the designed invitation cover (public/gate.jpg) */}
+          {/* Gate screen: palace background (public/gate-bg.jpg) + hand-built invitation cover */}
           <AnimatePresence>
             {gate && (
               <motion.div
                 key="gate"
-                className="absolute inset-0 z-10 flex items-center justify-center bg-[#0a1140] overflow-hidden"
+                className="absolute inset-0 z-10 flex items-center justify-center bg-[#050b2a] overflow-hidden"
                 exit={{ opacity: 0, scale: 1.03 }}
                 transition={{ duration: 0.7 }}
               >
-                {/* Blurred colour fill for the space around the artwork */}
+                {/* Blurred fill for wide screens */}
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-center bg-cover scale-125 blur-2xl opacity-70"
-                  style={{ backgroundImage: 'url(/gate.jpg)' }}
+                  className="absolute inset-0 bg-center bg-cover scale-110 blur-2xl opacity-60"
+                  style={{ backgroundImage: 'url(/gate-bg.jpg)' }}
                 />
 
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1.1, ease: 'easeOut' }}
-                  className="relative z-[1] aspect-[853/1280] h-full max-h-full max-w-full shadow-[0_0_80px_rgba(0,0,0,0.6)]"
-                  style={{ maxWidth: 'min(100%, calc(100svh * 853 / 1280))' }}
+                {/* Portrait card: full screen on phones, centred 9:16 on desktop */}
+                <div
+                  className="relative z-[1] h-full w-full md:w-auto md:aspect-[9/16] bg-cover bg-bottom md:shadow-[0_0_80px_rgba(0,0,0,0.6)] overflow-hidden"
+                  style={{ backgroundImage: 'url(/gate-bg.jpg)' }}
                 >
-                  <img
-                    src="/gate.jpg"
-                    alt="Maliyadeva College — An Invitation Awaits"
-                    draggable={false}
-                    className="absolute inset-0 w-full h-full object-contain select-none"
-                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1.2, ease: 'easeOut' }}
+                    className="absolute inset-x-0 top-[15%] flex flex-col items-center text-center px-6"
+                  >
+                    {/* Crest with golden sunburst */}
+                    <div className="relative">
+                      <div className="absolute -inset-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,214,120,0.75),rgba(255,190,80,0.25)_45%,transparent_75%)] animate-pulse-glow" />
+                      <div className="absolute -inset-16 rounded-full bg-[repeating-conic-gradient(from_0deg,rgba(255,225,150,0.22)_0deg_3deg,transparent_3deg_12deg)] [mask-image:radial-gradient(closest-side,black_20%,transparent_80%)] [-webkit-mask-image:radial-gradient(closest-side,black_20%,transparent_80%)]" />
+                      <Crest className="relative h-[clamp(78px,15svh,170px)] w-auto aspect-[372/420] drop-shadow-[0_6px_18px_rgba(0,0,0,0.55)]" />
+                    </div>
 
-                  {/* Tap area over the artwork's "Open Invitation" button */}
-                  <button
-                    onClick={openInvitation}
-                    aria-label="Open Invitation"
-                    className="absolute left-[13%] top-[55.6%] w-[74%] h-[8%] rounded-full animate-gate-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-[#fae596]"
-                  />
-                </motion.div>
+                    <p className="mt-[clamp(12px,3.2svh,32px)] font-cinzel font-semibold whitespace-nowrap text-[min(4.4vw,2.3svh)] md:text-[clamp(1rem,2.6svh,1.5rem)] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-gold-gradient drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+                      Maliyadeva College
+                    </p>
 
-                {/* Tapping anywhere else on the cover opens it too */}
-                <button
-                  onClick={openInvitation}
-                  aria-hidden="true"
-                  tabIndex={-1}
-                  className="absolute inset-0 -z-0 cursor-pointer"
-                  style={{ zIndex: 0 }}
-                />
+                    {/* Line + diamond divider */}
+                    <div className="mt-3 flex items-center gap-2 w-[min(80%,320px)]">
+                      <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#e8c15a]" />
+                      <span className="w-2 h-2 rotate-45 bg-gold-gradient shadow-[0_0_8px_rgba(250,229,150,0.8)]" />
+                      <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#e8c15a]" />
+                    </div>
+
+                    <h1 className="mt-[clamp(6px,2svh,20px)] font-script text-[min(9.5vw,5.6svh)] md:text-[clamp(2.4rem,6.4svh,4rem)] leading-[1.05] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] px-2">
+                      An Invitation Awaits
+                    </h1>
+
+                    {/* Swoosh with spark */}
+                    <div className="relative mt-1 w-[min(78%,320px)] h-4">
+                      <span className="absolute inset-x-0 top-1/2 h-[2px] rounded-full bg-gradient-to-r from-transparent via-[#e8c15a] to-transparent" />
+                      <span className="absolute right-[18%] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-[0_0_14px_6px_rgba(255,220,130,0.9)]" />
+                    </div>
+
+                    {/* Ornate gold button */}
+                    <button
+                      onClick={openInvitation}
+                      className="group relative mt-[clamp(14px,3.5svh,34px)] flex items-center justify-center"
+                    >
+                      <span className="absolute -left-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
+                      <span className="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
+                      <span className="relative flex items-center gap-3 px-6 sm:px-10 py-[clamp(9px,1.5svh,15px)] rounded-full p-[1.5px] bg-gold-gradient animate-gate-glow">
+                        <span className="absolute inset-[2px] rounded-full bg-[linear-gradient(180deg,#0d1a55,#050b2a)] group-hover:bg-[linear-gradient(180deg,#16297a,#0a1446)] transition-colors" />
+                        <span className="relative w-1.5 h-1.5 rotate-45 bg-[#f5d77f]" />
+                        <span className="relative font-cinzel text-[min(3.6vw,15px)] sm:text-lg tracking-[0.2em] uppercase text-gold-gradient">
+                          Open Invitation
+                        </span>
+                        <span className="relative w-1.5 h-1.5 rotate-45 bg-[#f5d77f]" />
+                      </span>
+                    </button>
+
+                    <div className="mt-[clamp(10px,2.2svh,20px)] flex items-center gap-3">
+                      <span className="h-px w-5 sm:w-8 bg-gradient-to-r from-transparent to-[#e8c15a]" />
+                      <p className="font-cinzel whitespace-nowrap text-[min(2.3vw,10px)] sm:text-[11px] tracking-[0.14em] sm:tracking-[0.22em] uppercase text-[#f3e5ab]">
+                        Sound on for the best experience
+                      </p>
+                      <span className="h-px w-5 sm:w-8 bg-gradient-to-l from-transparent to-[#e8c15a]" />
+                    </div>
+                  </motion.div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

@@ -35,7 +35,8 @@ body {
     font-family: 'Cinzel Decorative', 'Cinzel', serif;
   }
   .font-script {
-    font-family: 'Pinyon Script', 'Great Vibes', cursive;
+    font-family: 'Pinyon Script', 'Great Vibes', 'Cormorant Garamond', Georgia, serif;
+    font-style: normal;
   }
   .font-serif-luxury {
     font-family: 'Cormorant Garamond', Georgia, serif;
