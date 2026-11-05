@@ -144,7 +144,7 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1.2, ease: 'easeOut' }}
-                    className="absolute inset-x-0 top-[15%] flex flex-col items-center text-center px-6"
+                    className="absolute inset-x-0 top-[8%] flex flex-col items-center text-center px-6"
                   >
                     {/* Crest with golden sunburst */}
                     <div className="relative">
@@ -164,7 +164,7 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
                       <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#e8c15a]" />
                     </div>
 
-                    <h1 className="mt-[clamp(6px,2svh,20px)] font-script text-[min(9.5vw,5.6svh)] md:text-[clamp(2.4rem,6.4svh,4rem)] leading-[1.05] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] px-2">
+                    <h1 className="mt-[clamp(6px,2svh,20px)] font-script text-[min(9.5vw,5.6svh)] md:text-[clamp(2.2rem,5svh,3.3rem)] leading-[1.05] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] px-2">
                       An Invitation Awaits
                     </h1>
 
@@ -177,7 +177,7 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
                     {/* Ornate gold button */}
                     <button
                       onClick={openInvitation}
-                      className="group relative mt-[clamp(32px,10svh,100px)] flex items-center justify-center"
+                      className="group relative mt-[clamp(22px,6svh,64px)] flex items-center justify-center"
                     >
                       <span className="absolute -left-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
                       <span className="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
