@@ -34,9 +34,15 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-4 pt-24 pb-16">
-      {/* Silk ribbon corners (from the cover artwork) */}
-      <img src="/decor/ribbon-tl.jpg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute top-0 left-0 w-[48vw] max-w-[300px] -z-10 opacity-90 [mask-image:radial-gradient(ellipse_at_top_left,black_25%,transparent_70%)] [-webkit-mask-image:radial-gradient(ellipse_at_top_left,black_25%,transparent_70%)]" />
-      <img src="/decor/ribbon-tl.jpg" alt="" aria-hidden="true" className="pointer-events-none select-none absolute top-0 right-0 w-[48vw] max-w-[300px] -z-10 opacity-90 -scale-x-100 [mask-image:radial-gradient(ellipse_at_top_left,black_25%,transparent_70%)] [-webkit-mask-image:radial-gradient(ellipse_at_top_left,black_25%,transparent_70%)]" />
+      {/* Full-bleed school building background (same artwork as the opening screen) */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen -z-10 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-[position:center_80%]"
+          style={{ backgroundImage: 'url(/gate-bg.jpg)' }}
+        />
+        {/* Darken the middle for readable text; fade into the page at the bottom */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,11,42,0.25)_0%,rgba(5,11,42,0.55)_35%,rgba(5,11,42,0.55)_60%,rgba(5,11,42,0.2)_80%,#050b2a_100%)]" />
+      </div>
       {/* Spotlight beam echoing the intro video */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(90vw,520px)] h-[80vh] pointer-events-none -z-10 bg-[linear-gradient(180deg,rgba(255,236,170,0.16),rgba(212,175,55,0.05)_55%,transparent)] [clip-path:polygon(42%_0,58%_0,100%_100%,0_100%)] blur-xl" />
 
@@ -46,14 +52,14 @@ export default function HeroSection() {
 
       <motion.p
         {...fadeUp(0.3)}
-        className="mt-6 font-cinzel text-xs sm:text-sm tracking-[0.45em] uppercase text-[#e6d5b8]"
+        className="mt-6 font-cinzel text-xs sm:text-sm tracking-[0.45em] uppercase text-[#f4efe6] [text-shadow:0_2px_10px_rgba(0,0,0,0.9)]"
       >
         Maliyadeva College
       </motion.p>
 
       <motion.p
         {...fadeUp(0.45)}
-        className="mt-2 font-serif-luxury italic text-base sm:text-lg text-[#c9b177]"
+        className="mt-2 font-serif-luxury italic text-base sm:text-lg text-[#f3e5ab] [text-shadow:0_2px_10px_rgba(0,0,0,0.9)]"
       >
         cordially invites you to the
       </motion.p>
@@ -65,7 +71,7 @@ export default function HeroSection() {
         <span className="block text-5xl sm:text-7xl md:text-8xl text-gold-shimmer drop-shadow-[0_6px_18px_rgba(0,0,0,0.85)]">
           Colours
         </span>
-        <span className="block mt-3 text-lg sm:text-2xl md:text-3xl tracking-[0.35em] text-[#f4efe6]">
+        <span className="block mt-3 text-lg sm:text-2xl md:text-3xl tracking-[0.35em] text-[#f4efe6] [text-shadow:0_2px_10px_rgba(0,0,0,0.9)]">
           Awarding Ceremony
         </span>
       </motion.h1>
@@ -81,11 +87,11 @@ export default function HeroSection() {
       <motion.div {...fadeUp(0.9)} className="tricolour-rule w-48 sm:w-64 mt-7" />
 
       {/* Countdown */}
-      <motion.div {...fadeUp(1.05)} className="mt-12 w-full max-w-md">
-        <p className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.35em] uppercase text-[#c9b177] mb-4">
+      <motion.div {...fadeUp(1.05)} className="mt-12 w-full max-w-md rounded-2xl border border-[#d4af37]/30 bg-[#050b2a]/75 backdrop-blur-md px-2 pt-4 pb-4 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+        <p className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.35em] uppercase text-[#f3e5ab] mb-3">
           Wednesday · 2nd December 2026
         </p>
-        <div className="grid grid-cols-4 divide-x divide-[#d4af37]/20 border-y border-[#d4af37]/20 py-4">
+        <div className="grid grid-cols-4 divide-x divide-[#d4af37]/20 border-t border-[#d4af37]/20 pt-3">
           {[
             ['Days', t.days],
             ['Hours', t.hours],
