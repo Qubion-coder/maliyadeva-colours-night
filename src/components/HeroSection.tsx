@@ -34,15 +34,6 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-4 pt-24 pb-16">
-      {/* Full-bleed school building background (same artwork as the opening screen) */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen -z-10 overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-[position:center_80%]"
-          style={{ backgroundImage: 'url(/gate-bg.jpg)' }}
-        />
-        {/* Darken the middle for readable text; fade into the page at the bottom */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,11,42,0.25)_0%,rgba(5,11,42,0.55)_35%,rgba(5,11,42,0.55)_60%,rgba(5,11,42,0.2)_80%,#050b2a_100%)]" />
-      </div>
       {/* Spotlight beam echoing the intro video */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(90vw,520px)] h-[80vh] pointer-events-none -z-10 bg-[linear-gradient(180deg,rgba(255,236,170,0.16),rgba(212,175,55,0.05)_55%,transparent)] [clip-path:polygon(42%_0,58%_0,100%_100%,0_100%)] blur-xl" />
 
