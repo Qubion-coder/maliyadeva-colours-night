@@ -10,7 +10,7 @@ const reveal = (delay = 0) => ({
 
 const details = [
   { icon: CalendarDays, label: 'Date', value: '2nd December 2026', sub: 'Wednesday' },
-  { icon: Clock, label: 'Time', value: '3:30 PM', sub: 'Onwards' },
+  { icon: Clock, label: 'Time', value: '3:00 PM', sub: 'Onwards' },
   { icon: Landmark, label: 'Venue', value: 'College Auditorium', sub: 'Maliyadeva College' },
 ];
 

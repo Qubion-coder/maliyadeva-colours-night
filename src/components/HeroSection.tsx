@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
 import Crest from './Crest';
 
-export const EVENT_DATE = new Date('2026-12-02T15:30:00+05:30');
+export const EVENT_DATE = new Date('2026-12-02T15:00:00+05:30');
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
