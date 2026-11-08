@@ -171,3 +171,87 @@ body {
 .animate-gate-glow {
   animation: gateGlow 2.6s ease-in-out infinite;
 }
+
+/* ================= Hero: slow, cinematic ambience ================= */
+@keyframes heroBreath {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* Stage spotlights that sweep slowly from the top */
+.hero-beam {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: min(70vw, 420px);
+  height: 115%;
+  margin-left: calc(min(70vw, 420px) / -2);
+  transform-origin: 50% 0%;
+  background: linear-gradient(180deg, rgba(255, 236, 170, 0.28), rgba(212, 175, 55, 0.08) 55%, transparent 85%);
+  clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%);
+  filter: blur(14px);
+  mix-blend-mode: screen;
+}
+.hero-beam-left { animation: heroSweepLeft 11s ease-in-out infinite; }
+.hero-beam-right { animation: heroSweepRight 11s ease-in-out infinite; }
+@keyframes heroSweepLeft {
+  0%, 100% { transform: rotate(18deg); opacity: 0.7; }
+  50% { transform: rotate(-6deg); opacity: 1; }
+}
+@keyframes heroSweepRight {
+  0%, 100% { transform: rotate(-18deg); opacity: 0.7; }
+  50% { transform: rotate(6deg); opacity: 1; }
+}
+
+/* Gold sparkles drifting upward */
+.hero-sparkle {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #fff6d0 0%, #e8c15a 55%, transparent 70%);
+  box-shadow: 0 0 8px 2px rgba(255, 214, 120, 0.6);
+  opacity: 0;
+  animation-name: heroRise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes heroRise {
+  0% { transform: translate3d(0, 0, 0) scale(0.6); opacity: 0; }
+  10% { opacity: 0.9; }
+  60% { opacity: 0.7; }
+  100% { transform: translate3d(24px, -105vh, 0) scale(1.1); opacity: 0; }
+}
+
+/* Slower, richer shimmer for the main title */
+.text-gold-shimmer-slow {
+  background: linear-gradient(90deg, #b8922e 0%, #fff2b2 25%, #ffd76a 40%, #c49929 55%, #fff6d0 75%, #b8922e 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShimmer 9s linear infinite;
+}
+
+/* A soft gold sheen that glides across the countdown card */
+.hero-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 230, 160, 0.14) 50%, transparent 65%);
+  transform: translateX(-100%);
+  animation: heroSheen 7s ease-in-out 6s infinite;
+  pointer-events: none;
+}
+@keyframes heroSheen {
+  0% { transform: translateX(-100%); }
+  45%, 100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-beam, .hero-sparkle, .text-gold-shimmer-slow, .hero-sheen::after,
+  .animate-float-slow, .animate-pulse-glow, .animate-gate-glow,
+  [class*="animate-[heroBreath"], [class*="animate-[spin"] {
+    animation: none !important;
+  }
+  .hero-sparkle { display: none; }
+}
