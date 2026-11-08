@@ -29,7 +29,7 @@ body {
 
 @layer utilities {
   .font-cinzel {
-    font-family: 'Cinzel', serif;
+    font-family: 'Cinzel', 'Noto Serif Sinhala', serif;
   }
   .font-cinzel-decorative {
     font-family: 'Cinzel Decorative', 'Cinzel', serif;

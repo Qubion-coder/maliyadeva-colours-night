@@ -9,6 +9,8 @@ interface IntroVideoProps {
   onStart: () => void;
   isMusicPlaying: boolean;
   onToggleMusic: () => void;
+  /** Coloursman's name from a personal link; null shows the general invitation. */
+  guestName?: string | null;
 }
 
 /**
@@ -18,7 +20,13 @@ interface IntroVideoProps {
  *    the background song (see App).
  * It retries silently until playback starts. On end / skip the overlay fades to reveal the invitation.
  */
-export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggleMusic }: IntroVideoProps) {
+export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggleMusic, guestName }: IntroVideoProps) {
+  // Long names get a smaller size so they stay on at most two lines
+  const nameSize =
+    !guestName ? '' :
+    guestName.length <= 16 ? 'text-[min(7.6vw,4.4svh)] md:text-[clamp(1.8rem,4.4svh,2.8rem)]' :
+    guestName.length <= 28 ? 'text-[min(6.2vw,3.6svh)] md:text-[clamp(1.5rem,3.6svh,2.3rem)]' :
+    'text-[min(5vw,3svh)] md:text-[clamp(1.2rem,3svh,1.9rem)]';
   const [visible, setVisible] = useState(true);
   const [gate, setGate] = useState(true);
   const [started, setStarted] = useState(false);
@@ -144,13 +152,13 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1.2, ease: 'easeOut' }}
-                    className="absolute inset-x-0 top-[8%] flex flex-col items-center text-center px-6"
+                    className={`absolute inset-x-0 ${guestName ? 'top-[6%]' : 'top-[8%]'} flex flex-col items-center text-center px-6`}
                   >
                     {/* Crest with golden sunburst */}
                     <div className="relative">
                       <div className="absolute -inset-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,214,120,0.75),rgba(255,190,80,0.25)_45%,transparent_75%)] animate-pulse-glow" />
                       <div className="absolute -inset-16 rounded-full bg-[repeating-conic-gradient(from_0deg,rgba(255,225,150,0.22)_0deg_3deg,transparent_3deg_12deg)] [mask-image:radial-gradient(closest-side,black_20%,transparent_80%)] [-webkit-mask-image:radial-gradient(closest-side,black_20%,transparent_80%)]" />
-                      <Crest className="relative h-[clamp(78px,15svh,170px)] w-auto aspect-[372/420] drop-shadow-[0_6px_18px_rgba(0,0,0,0.55)]" />
+                      <Crest className={`relative ${guestName ? 'h-[clamp(64px,11.5svh,140px)]' : 'h-[clamp(78px,15svh,170px)]'} w-auto aspect-[372/420] drop-shadow-[0_6px_18px_rgba(0,0,0,0.55)]`} />
                     </div>
 
                     <p className="mt-[clamp(12px,3.2svh,32px)] font-cinzel font-semibold whitespace-nowrap text-[min(4.4vw,2.3svh)] md:text-[clamp(1rem,2.6svh,1.5rem)] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-gold-gradient drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
@@ -164,9 +172,29 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
                       <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#e8c15a]" />
                     </div>
 
-                    <h1 className="mt-[clamp(6px,2svh,20px)] font-script text-[min(9.5vw,5.6svh)] md:text-[clamp(2.2rem,5svh,3.3rem)] leading-[1.05] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] px-2">
-                      An Invitation Awaits
-                    </h1>
+                    {guestName ? (
+                      <>
+                        {/* Personalised greeting for a Coloursman */}
+                        <p className="mt-[clamp(8px,2svh,18px)] font-serif-luxury italic text-[min(4.6vw,2.4svh)] md:text-[clamp(1rem,2.4svh,1.35rem)] text-[#f3e5ab] drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+                          Dear
+                        </p>
+                        <p className={`mt-1 max-w-[92%] font-cinzel font-bold uppercase tracking-[0.06em] leading-[1.15] text-gold-shimmer drop-shadow-[0_3px_10px_rgba(0,0,0,0.7)] break-words ${nameSize}`}>
+                          {guestName}
+                        </p>
+                        <span className="mt-[clamp(6px,1.4svh,12px)] inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#e8c15a]/50 bg-[#050b2a]/50 backdrop-blur-sm font-cinzel text-[min(2.6vw,11px)] tracking-[0.25em] uppercase text-[#f5d77f]">
+                          <span className="w-1 h-1 rotate-45 bg-[#f5d77f]" />
+                          Coloursman · 2024/2025
+                          <span className="w-1 h-1 rotate-45 bg-[#f5d77f]" />
+                        </span>
+                        <h1 className="mt-[clamp(6px,1.6svh,16px)] font-script text-[min(8vw,4.6svh)] md:text-[clamp(1.9rem,4.2svh,2.8rem)] leading-[1.05] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] px-2">
+                          Your Invitation Awaits
+                        </h1>
+                      </>
+                    ) : (
+                      <h1 className="mt-[clamp(6px,2svh,20px)] font-script text-[min(9.5vw,5.6svh)] md:text-[clamp(2.2rem,5svh,3.3rem)] leading-[1.05] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] px-2">
+                        An Invitation Awaits
+                      </h1>
+                    )}
 
                     {/* Swoosh with spark */}
                     <div className="relative mt-1 w-[min(78%,320px)] h-4">
@@ -177,7 +205,7 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
                     {/* Ornate gold button */}
                     <button
                       onClick={openInvitation}
-                      className="group relative mt-[clamp(22px,6svh,64px)] flex items-center justify-center"
+                      className={`group relative ${guestName ? 'mt-[clamp(16px,3.5svh,40px)]' : 'mt-[clamp(22px,6svh,64px)]'} flex items-center justify-center`}
                     >
                       <span className="absolute -left-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />
                       <span className="absolute -right-5 top-1/2 -translate-y-1/2 w-6 h-px bg-[#e8c15a]" />

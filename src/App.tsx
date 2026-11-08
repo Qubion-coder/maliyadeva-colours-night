@@ -7,11 +7,14 @@ import EventDetailsSection from './components/EventDetailsSection';
 import ChiefGuestSection from './components/ChiefGuestSection';
 import ClosingSection from './components/ClosingSection';
 import { luxuryAudio } from './components/BackgroundMusicPlayer';
+import { readGuestName } from './lib/invite';
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(true);
   const [introKey, setIntroKey] = useState(0);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  // Personal link (?to=...) → Coloursman's name on the opening screen
+  const [guestName] = useState(() => readGuestName());
 
   const startMusic = async () => {
     if (luxuryAudio.isPlaying()) return;
@@ -60,6 +63,7 @@ export default function App() {
           onStart={startMusic}
           isMusicPlaying={isMusicPlaying}
           onToggleMusic={handleToggleMusic}
+          guestName={guestName}
         />
       )}
 
