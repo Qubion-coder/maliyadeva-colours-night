@@ -51,6 +51,13 @@ const SPARKLES = Array.from({ length: 22 }, (_, i) => ({
 const TITLE = 'COLOURS';
 /** Jewel tone per letter — the school colours: ruby, gold, royal blue */
 const LETTER_TONES = ['ruby', 'gold', 'sapphire', 'ruby', 'gold', 'sapphire', 'ruby'] as const;
+/** Where the little star glints sparkle (letter index → position) */
+const GLINTS: Record<number, { top: string; left: string; delay: string }> = {
+  0: { top: '12%', left: '62%', delay: '5s' },
+  2: { top: '8%', left: '18%', delay: '7.2s' },
+  4: { top: '14%', left: '70%', delay: '6.1s' },
+  6: { top: '20%', left: '58%', delay: '8.3s' },
+};
 
 export default function HeroSection() {
   const t = useCountdown(EVENT_DATE);
@@ -157,7 +164,7 @@ export default function HeroSection() {
       {/* ===== Title ===== */}
       <h1 className="mt-6 font-cinzel font-bold uppercase leading-[0.95]">
         <span className="sr-only">Colours Awarding Ceremony</span>
-        <span aria-hidden="true" className="relative flex justify-center text-[clamp(3rem,14.5vw,8.5rem)] tracking-[0.06em] drop-shadow-[0_8px_20px_rgba(0,0,0,0.7)]">
+        <span aria-hidden="true" className="relative flex justify-center text-[clamp(3rem,14.5vw,8.5rem)] tracking-[0.06em] colours-word">
           {/* soft glow behind the word */}
           <span className="absolute inset-x-[10%] inset-y-[20%] -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,200,90,0.35),transparent)] blur-2xl animate-[heroBreath_6s_ease-in-out_infinite]" />
           {TITLE.split('').map((ch, i) => (
@@ -166,10 +173,26 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 50, filter: 'blur(14px)', rotateX: 70 }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0 }}
               transition={{ duration: 1.6, delay: 2.0 + i * 0.18, ease: EASE }}
-              className={`inline-block jewel-letter jewel-${LETTER_TONES[i % LETTER_TONES.length]}`}
-              style={{ animationDelay: `${3.6 + i * 0.12}s` }}
+              className="relative inline-block"
             >
-              {ch}
+              {/* gold bevel rim sits behind the coloured letter */}
+              <span className="jewel-rim">{ch}</span>
+              <span
+                className={`relative jewel-letter jewel-${LETTER_TONES[i % LETTER_TONES.length]}`}
+                style={{ animationDelay: `${3.6 + i * 0.12}s` }}
+              >
+                {ch}
+              </span>
+              {/* Twinkling star glints on a few letters */}
+              {GLINTS[i] && (
+                <svg
+                  viewBox="0 0 24 24"
+                  className="jewel-glint"
+                  style={{ top: GLINTS[i].top, left: GLINTS[i].left, animationDelay: GLINTS[i].delay }}
+                >
+                  <path d="M12 0 C13 8 16 11 24 12 C16 13 13 16 12 24 C11 16 8 13 0 12 C8 11 11 8 12 0 Z" fill="#fff" />
+                </svg>
+              )}
             </motion.span>
           ))}
         </span>

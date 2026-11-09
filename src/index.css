@@ -327,36 +327,71 @@ body {
 @media (prefers-reduced-motion: reduce) { .text-ceremony { animation: none; } }
 
 /* ================= Title: jewel letters ================= */
+/* Warm gold halo + depth shadow around the whole word */
+.colours-word {
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 22px rgba(255, 200, 100, 0.28));
+}
+
 .jewel-letter {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1.2px rgba(255, 228, 150, 0.9);
+  /* bright inner gold rim */
+  -webkit-text-stroke: 1.5px #ffe9a8;
   background-size: 260% 100%, 100% 100%;
   background-position: 160% 0, 0 0;
   background-repeat: no-repeat;
   animation: jewelShine 7s ease-in-out infinite;
 }
-/* first layer = travelling white shine, second = the jewel colour */
+/* deep gold outer rim behind the letter (bevelled setting) */
+.jewel-rim {
+  position: absolute;
+  inset: 0;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  -webkit-text-stroke: clamp(3px, 0.65vw, 7px) #b48420;
+  filter: drop-shadow(0 0 1px #ffe08a) drop-shadow(0 2px 0 #5c3f0b);
+  pointer-events: none;
+}
+
+/* Mirror-polished jewel tones: bright crown, dark reflective horizon, glowing base.
+   First layer = travelling white shine. */
 .jewel-ruby {
   background-image:
-    linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.85) 50%, transparent 58%),
-    linear-gradient(180deg, #ffd6de 0%, #ff5c7a 28%, #d0123a 55%, #7a0a22 100%);
+    linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.95) 50%, transparent 60%),
+    linear-gradient(180deg, #fff2f5 0%, #ffb3c3 14%, #ff4d70 32%, #c40c34 47%, #5e0619 52%, #a50f2d 60%, #ff3d63 80%, #ffc2cf 100%);
 }
 .jewel-gold {
   background-image:
-    linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.9) 50%, transparent 58%),
-    linear-gradient(180deg, #fff8dc 0%, #ffd86b 30%, #e0a91c 58%, #8a6318 100%);
+    linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 1) 50%, transparent 60%),
+    linear-gradient(180deg, #fffdf0 0%, #fff0b3 14%, #ffd24d 32%, #d99a10 47%, #7a5208 52%, #c08a12 60%, #ffd75e 80%, #fff3c4 100%);
 }
 .jewel-sapphire {
   background-image:
-    linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.85) 50%, transparent 58%),
-    linear-gradient(180deg, #e6eeff 0%, #7fa6ff 28%, #2f62f0 55%, #0e2a8c 100%);
+    linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.95) 50%, transparent 60%),
+    linear-gradient(180deg, #f2f6ff 0%, #b8ceff 14%, #5c8dff 32%, #1f4fe0 47%, #0a1f6e 52%, #1b45c8 60%, #5f93ff 80%, #cfe0ff 100%);
 }
 @keyframes jewelShine {
   0%, 55% { background-position: 160% 0, 0 0; }
   80%, 100% { background-position: -60% 0, 0 0; }
 }
+
+/* Star glints */
+.jewel-glint {
+  position: absolute;
+  width: 0.22em;
+  height: 0.22em;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px rgba(255, 230, 160, 0.9));
+  transform: scale(0) rotate(0deg);
+  animation: jewelGlint 6s ease-in-out infinite;
+}
+@keyframes jewelGlint {
+  0%, 82%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+  88% { transform: scale(1) rotate(45deg); opacity: 1; }
+  94% { transform: scale(0.3) rotate(90deg); opacity: 0.6; }
+}
+@media (prefers-reduced-motion: reduce) { .jewel-glint { display: none; } }
 
 /* ================= Ceremonial sash ================= */
 .ceremony-sash {
