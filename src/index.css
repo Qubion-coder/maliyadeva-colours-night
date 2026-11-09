@@ -255,3 +255,73 @@ body {
   }
   .hero-sparkle { display: none; }
 }
+
+/* ================= Hero: colourful layer ================= */
+/* Colour smoke clouds drifting slowly */
+.hero-smoke {
+  position: absolute;
+  width: min(80vw, 620px);
+  height: min(80vw, 620px);
+  border-radius: 9999px;
+  filter: blur(70px);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+}
+.hero-smoke-rose { top: 22%; left: -18%; background: radial-gradient(closest-side, #d4143a, transparent 70%); animation: heroDriftA 22s ease-in-out infinite; }
+.hero-smoke-gold { top: 48%; left: 30%; background: radial-gradient(closest-side, #f0b429, transparent 70%); opacity: 0.32; animation: heroDriftB 26s ease-in-out infinite; }
+.hero-smoke-blue { top: 30%; right: -18%; background: radial-gradient(closest-side, #2a62ff, transparent 70%); animation: heroDriftC 24s ease-in-out infinite; }
+@keyframes heroDriftA { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(12%, -8%) scale(1.15); } }
+@keyframes heroDriftB { 0%,100% { transform: translate(-50%,0) scale(1); } 50% { transform: translate(-40%, -12%) scale(1.2); } }
+@keyframes heroDriftC { 0%,100% { transform: translate(0,0) scale(1.05); } 50% { transform: translate(-14%, 6%) scale(0.95); } }
+
+/* Tinted spotlights: rose, gold, blue */
+.hero-beam-left { background: linear-gradient(180deg, rgba(255, 120, 150, 0.32), rgba(200, 16, 46, 0.1) 55%, transparent 85%); }
+.hero-beam-right { background: linear-gradient(180deg, rgba(130, 170, 255, 0.34), rgba(47, 107, 255, 0.1) 55%, transparent 85%); }
+.hero-beam-center { background: linear-gradient(180deg, rgba(255, 236, 170, 0.3), rgba(232, 185, 49, 0.08) 55%, transparent 85%); animation: heroSweepCenter 13s ease-in-out infinite; }
+@keyframes heroSweepCenter { 0%,100% { transform: rotate(-4deg); opacity: 0.8; } 50% { transform: rotate(4deg); opacity: 1; } }
+
+/* Silk ribbons — fixed in place, flush with the top corners */
+.hero-ribbon {
+  position: absolute;
+  top: 0;
+  width: min(52vw, 520px);
+  height: min(39vw, 390px);
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.5));
+}
+.hero-ribbon-left { left: 0; }
+.hero-ribbon-right { right: 0; transform: scaleX(-1); }
+
+/* Multi-colour sparkles */
+.hero-sparkle-rose { background: radial-gradient(circle, #ffe1e8 0%, #ff4d6d 55%, transparent 70%); box-shadow: 0 0 8px 2px rgba(255, 77, 109, 0.6); }
+.hero-sparkle-sky { background: radial-gradient(circle, #e3ecff 0%, #5b8cff 55%, transparent 70%); box-shadow: 0 0 8px 2px rgba(91, 140, 255, 0.6); }
+
+/* Title: gold with a rose → gold → sky shimmer travelling through the letters */
+.text-colours-shimmer {
+  background: linear-gradient(100deg,
+    #e8b931 0%, #fff1b8 12%, #f5c84c 24%,
+    #ff8fa3 34%, #f5c84c 44%, #fff6d0 52%,
+    #f5c84c 60%, #9ab8ff 70%, #f5c84c 80%, #fff1b8 90%, #e8b931 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: coloursShimmer 10s linear infinite;
+}
+@keyframes coloursShimmer { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-smoke, .hero-ribbon, .text-colours-shimmer, .hero-beam-center { animation: none !important; }
+}
+
+/* "Awarding Ceremony": rose → champagne gold → ice blue, slow gentle shimmer */
+.text-ceremony {
+  background: linear-gradient(90deg, #ffb3c1 0%, #ffe3a3 22%, #fff6d8 38%, #f5c84c 50%, #fff6d8 62%, #ffe3a3 76%, #b9cdff 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 14px rgba(255, 214, 140, 0.25));
+  animation: ceremonyShimmer 12s ease-in-out infinite alternate;
+}
+@keyframes ceremonyShimmer { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+@media (prefers-reduced-motion: reduce) { .text-ceremony { animation: none; } }
