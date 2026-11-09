@@ -325,3 +325,66 @@ body {
 }
 @keyframes ceremonyShimmer { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 @media (prefers-reduced-motion: reduce) { .text-ceremony { animation: none; } }
+
+/* ================= Title: jewel letters ================= */
+.jewel-letter {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1.2px rgba(255, 228, 150, 0.9);
+  background-size: 260% 100%, 100% 100%;
+  background-position: 160% 0, 0 0;
+  background-repeat: no-repeat;
+  animation: jewelShine 7s ease-in-out infinite;
+}
+/* first layer = travelling white shine, second = the jewel colour */
+.jewel-ruby {
+  background-image:
+    linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.85) 50%, transparent 58%),
+    linear-gradient(180deg, #ffd6de 0%, #ff5c7a 28%, #d0123a 55%, #7a0a22 100%);
+}
+.jewel-gold {
+  background-image:
+    linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.9) 50%, transparent 58%),
+    linear-gradient(180deg, #fff8dc 0%, #ffd86b 30%, #e0a91c 58%, #8a6318 100%);
+}
+.jewel-sapphire {
+  background-image:
+    linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.85) 50%, transparent 58%),
+    linear-gradient(180deg, #e6eeff 0%, #7fa6ff 28%, #2f62f0 55%, #0e2a8c 100%);
+}
+@keyframes jewelShine {
+  0%, 55% { background-position: 160% 0, 0 0; }
+  80%, 100% { background-position: -60% 0, 0 0; }
+}
+
+/* ================= Ceremonial sash ================= */
+.ceremony-sash {
+  --notch: clamp(10px, 2.4vw, 18px);
+  display: inline-block;
+  padding: 1.5px;
+  background: linear-gradient(90deg, #8a6318, #fff1b8 25%, #e8b931 50%, #fff1b8 75%, #8a6318);
+  clip-path: polygon(0 0, 100% 0, calc(100% - var(--notch)) 50%, 100% 100%, 0 100%, var(--notch) 50%);
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
+}
+.ceremony-sash-inner {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: clamp(8px, 1.6vw, 12px) calc(var(--notch) + clamp(14px, 4vw, 34px));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 45%, rgba(0, 0, 0, 0.25)),
+    linear-gradient(90deg, #6e0a1e 0%, #b5122f 22%, #4a1f6e 50%, #1f45c4 78%, #0e2a8c 100%);
+  clip-path: polygon(0 0, 100% 0, calc(100% - var(--notch)) 50%, 100% 100%, 0 100%, var(--notch) 50%);
+}
+/* thin inner gold rules along top and bottom */
+.ceremony-sash-inner::before {
+  content: '';
+  position: absolute;
+  inset: 4px calc(var(--notch) * 0.6);
+  border-top: 1px solid rgba(255, 228, 150, 0.55);
+  border-bottom: 1px solid rgba(255, 228, 150, 0.55);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) { .jewel-letter { animation: none; } }

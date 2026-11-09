@@ -49,6 +49,8 @@ const SPARKLES = Array.from({ length: 22 }, (_, i) => ({
 }));
 
 const TITLE = 'COLOURS';
+/** Jewel tone per letter — the school colours: ruby, gold, royal blue */
+const LETTER_TONES = ['ruby', 'gold', 'sapphire', 'ruby', 'gold', 'sapphire', 'ruby'] as const;
 
 export default function HeroSection() {
   const t = useCountdown(EVENT_DATE);
@@ -155,7 +157,7 @@ export default function HeroSection() {
       {/* ===== Title ===== */}
       <h1 className="mt-6 font-cinzel font-bold uppercase leading-[0.95]">
         <span className="sr-only">Colours Awarding Ceremony</span>
-        <span aria-hidden="true" className="relative flex justify-center text-[clamp(3rem,14.5vw,8.5rem)] tracking-[0.06em]">
+        <span aria-hidden="true" className="relative flex justify-center text-[clamp(3rem,14.5vw,8.5rem)] tracking-[0.06em] drop-shadow-[0_8px_20px_rgba(0,0,0,0.7)]">
           {/* soft glow behind the word */}
           <span className="absolute inset-x-[10%] inset-y-[20%] -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,200,90,0.35),transparent)] blur-2xl animate-[heroBreath_6s_ease-in-out_infinite]" />
           {TITLE.split('').map((ch, i) => (
@@ -164,26 +166,28 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 50, filter: 'blur(14px)', rotateX: 70 }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0 }}
               transition={{ duration: 1.6, delay: 2.0 + i * 0.18, ease: EASE }}
-              className="inline-block text-colours-shimmer drop-shadow-[0_6px_18px_rgba(0,0,0,0.85)]"
-              style={{ animationDelay: `${-i * 0.55}s` }}
+              className={`inline-block jewel-letter jewel-${LETTER_TONES[i % LETTER_TONES.length]}`}
+              style={{ animationDelay: `${3.6 + i * 0.12}s` }}
             >
               {ch}
             </motion.span>
           ))}
         </span>
-        {/* Always one line; size follows screen width so it never wraps */}
+        {/* Ceremonial sash: maroon → royal blue with gold borders; always one line */}
         <motion.span
           aria-hidden="true"
-          initial={{ opacity: 0, scale: 0.92, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 2.4, delay: 3.4, ease: EASE }}
-          className="mt-4 flex items-center justify-center gap-2 sm:gap-4 whitespace-nowrap"
+          initial={{ opacity: 0, scaleX: 0.4 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 1.8, delay: 3.4, ease: EASE }}
+          className="mt-5 flex justify-center"
         >
-          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-[#ff6b81] shadow-[0_0_10px_rgba(255,107,129,0.9)] shrink-0" />
-          <span className="text-ceremony font-semibold text-[min(4.2vw,2rem)] tracking-[0.26em] pl-[0.26em]">
-            Awarding Ceremony
+          <span className="ceremony-sash">
+            <span className="ceremony-sash-inner hero-sheen">
+              <span className="relative text-gold-gradient font-semibold whitespace-nowrap text-[min(3.9vw,1.75rem)] tracking-[0.24em] pl-[0.24em]">
+                Awarding Ceremony
+              </span>
+            </span>
           </span>
-          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-[#7aa2ff] shadow-[0_0_10px_rgba(122,162,255,0.9)] shrink-0" />
         </motion.span>
       </h1>
 
