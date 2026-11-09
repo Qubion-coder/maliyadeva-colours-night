@@ -423,3 +423,22 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) { .jewel-letter { animation: none; } }
+
+/* ================= Scroll smoke ================= */
+.scroll-smoke {
+  position: absolute;
+  border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%;
+  filter: blur(48px);
+  mix-blend-mode: screen;
+  will-change: transform;
+  /* slow shape-shifting so the smoke feels alive even when not scrolling */
+  animation: smokeMorph 18s ease-in-out infinite alternate;
+}
+@keyframes smokeMorph {
+  0% { border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%; }
+  50% { border-radius: 60% 40% 45% 55% / 40% 60% 45% 55%; }
+  100% { border-radius: 40% 60% 55% 45% / 55% 45% 50% 50%; }
+}
+@media (max-width: 767px) {
+  .scroll-smoke { filter: blur(36px); }
+}

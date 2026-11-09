@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import GoldParticleBackground from './components/GoldParticleBackground';
 import IntroVideo from './components/IntroVideo';
+import ScrollSmoke from './components/ScrollSmoke';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import EventDetailsSection from './components/EventDetailsSection';
@@ -76,6 +77,9 @@ export default function App() {
         <div className="absolute top-2/3 -right-48 w-[520px] h-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(40,80,220,0.35),transparent)]" />
         <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-[radial-gradient(closest-side,rgba(212,175,55,0.14),transparent)]" />
       </div>
+
+      {/* Colour smoke that drifts as you scroll */}
+      {!showIntro && <ScrollSmoke />}
 
       <Navbar isMusicPlaying={isMusicPlaying} onToggleMusic={handleToggleMusic} />
 
