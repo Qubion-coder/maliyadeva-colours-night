@@ -9,7 +9,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 /** Slow, cinematic fade-up */
 const fadeUp = (delay = 0, duration = 1.8) => ({
-  initial: { opacity: 0, y: 30, filter: 'blur(6px)' },
+  initial: { opacity: 0, y: 26, filter: 'blur(6px)' },
   animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
   transition: { duration, delay, ease: EASE },
 });
@@ -40,90 +40,102 @@ function useCountdown(target: Date) {
 }
 
 /** Fixed sparkle positions so they don't jump between renders */
-const SPARKLES = Array.from({ length: 22 }, (_, i) => ({
+const SPARKLES = Array.from({ length: 18 }, (_, i) => ({
   left: (i * 37) % 100,
-  size: 2 + ((i * 7) % 4),
+  size: 2 + ((i * 7) % 3),
   delay: (i * 1.3) % 14,
-  duration: 12 + ((i * 5) % 10),
-  tone: (['gold', 'rose', 'gold', 'sky'] as const)[i % 4],
+  duration: 14 + ((i * 5) % 10),
 }));
 
 const TITLE = 'COLOURS';
-/** Jewel tone per letter — the school colours: ruby, gold, royal blue */
-const LETTER_TONES = ['ruby', 'gold', 'sapphire', 'ruby', 'gold', 'sapphire', 'ruby'] as const;
-/** Where the little star glints sparkle (letter index → position) */
-const GLINTS: Record<number, { top: string; left: string; delay: string }> = {
-  0: { top: '12%', left: '62%', delay: '5s' },
-  2: { top: '8%', left: '18%', delay: '7.2s' },
-  4: { top: '14%', left: '70%', delay: '6.1s' },
-  6: { top: '20%', left: '58%', delay: '8.3s' },
-};
+
+/** Thin line – diamond – thin line */
+function DiamondDivider({ delay, wide = false }: { delay: number; wide?: boolean }) {
+  return (
+    <div className={`flex items-center justify-center gap-2 ${wide ? 'w-[min(88%,520px)]' : 'w-[min(70%,340px)]'}`}>
+      <motion.span {...drawLine(delay)} className="h-px flex-1 origin-right bg-gradient-to-r from-transparent via-[#c9a14a] to-[#f5d77f]" />
+      <motion.svg {...fadeUp(delay, 1.2)} viewBox="0 0 24 24" className="w-4 h-4 shrink-0" aria-hidden="true">
+        <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="url(#heroGold)" />
+      </motion.svg>
+      <motion.span {...drawLine(delay)} className="h-px flex-1 origin-left bg-gradient-to-l from-transparent via-[#c9a14a] to-[#f5d77f]" />
+    </div>
+  );
+}
+
+/** Ornate flourish divider under the title */
+function FlourishDivider({ delay }: { delay: number }) {
+  return (
+    <div className="flex items-center justify-center gap-2 w-[min(92%,600px)]">
+      <motion.span {...drawLine(delay)} className="h-[1.5px] flex-1 origin-right bg-gradient-to-r from-transparent via-[#c9a14a] to-[#f5d77f]" />
+      <motion.svg {...fadeUp(delay, 1.3)} viewBox="0 0 120 40" className="w-20 h-7 shrink-0" aria-hidden="true">
+        <g fill="none" stroke="url(#heroGold)" strokeWidth="2" strokeLinecap="round">
+          <path d="M60 6 C54 14 54 20 60 26 C66 20 66 14 60 6 Z" fill="url(#heroGold)" />
+          <path d="M60 30 C52 30 44 34 40 26 C37 20 44 16 48 20 C51 23 48 27 45 26" />
+          <path d="M60 30 C68 30 76 34 80 26 C83 20 76 16 72 20 C69 23 72 27 75 26" />
+          <path d="M40 26 C30 30 20 26 6 26" />
+          <path d="M80 26 C90 30 100 26 114 26" />
+        </g>
+        <circle cx="60" cy="33" r="2.4" fill="url(#heroGold)" />
+      </motion.svg>
+      <motion.span {...drawLine(delay)} className="h-[1.5px] flex-1 origin-left bg-gradient-to-l from-transparent via-[#c9a14a] to-[#f5d77f]" />
+    </div>
+  );
+}
+
+/** Flowing gold satin ribbon for the corners */
+function GoldRibbon({ className }: { className: string }) {
+  return (
+    <svg viewBox="0 0 300 300" className={className} aria-hidden="true" preserveAspectRatio="xMinYMin meet">
+      <path d="M0 210 C60 170 90 120 130 80 C170 40 220 15 300 0 L300 14 C228 28 182 54 144 92 C104 132 72 182 0 228 Z" fill="url(#heroRibbonGold)" />
+      <path d="M0 228 C72 182 104 132 144 92" fill="none" stroke="#fff6d0" strokeOpacity="0.55" strokeWidth="1.2" />
+      <path d="M0 250 C50 222 80 190 108 152" fill="none" stroke="url(#heroRibbonGold)" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+    </svg>
+  );
+}
 
 export default function HeroSection() {
   const t = useCountdown(EVENT_DATE);
   const reduce = useReducedMotion();
 
   return (
-    <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-4 pt-24 pb-16">
-      {/* ===== Living background ===== */}
+    <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-4 pt-20 pb-14">
+      {/* Shared gold gradients */}
+      <svg width="0" height="0" className="absolute" aria-hidden="true">
+        <defs>
+          <linearGradient id="heroGold" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#fff6d0" />
+            <stop offset="45%" stopColor="#f0c55a" />
+            <stop offset="100%" stopColor="#a87a1f" />
+          </linearGradient>
+          <linearGradient id="heroRibbonGold" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#7a5410" />
+            <stop offset="30%" stopColor="#e8b931" />
+            <stop offset="50%" stopColor="#fff3c4" />
+            <stop offset="70%" stopColor="#d9a52a" />
+            <stop offset="100%" stopColor="#8a6318" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      {/* ===== Royal-blue silk backdrop ===== */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen -z-10 overflow-hidden">
-        {/* Drifting colour smoke (maroon · gold · royal blue), like the intro video */}
-        <div className="hero-smoke hero-smoke-rose" />
-        <div className="hero-smoke hero-smoke-gold" />
-        <div className="hero-smoke hero-smoke-blue" />
-
-        {/* Coloured stage spotlights sweeping slowly */}
-        <div className="hero-beam hero-beam-left" />
-        <div className="hero-beam hero-beam-center" />
-        <div className="hero-beam hero-beam-right" />
-
-        {/* Silk ribbons (maroon · royal blue · gold) waving in from the top corners */}
-        <svg width="0" height="0" className="absolute">
-          <defs>
-            <linearGradient id="ribMaroon" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#ff4d6d" />
-              <stop offset="35%" stopColor="#c8102e" />
-              <stop offset="100%" stopColor="#5a0716" />
-            </linearGradient>
-            <linearGradient id="ribBlue" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#7aa2ff" />
-              <stop offset="40%" stopColor="#2a5bea" />
-              <stop offset="100%" stopColor="#0b1d6b" />
-            </linearGradient>
-            <linearGradient id="ribGold" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#8a6318" />
-              <stop offset="40%" stopColor="#fff1b8" />
-              <stop offset="70%" stopColor="#e8b931" />
-              <stop offset="100%" stopColor="#8a6318" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <svg className="hero-ribbon hero-ribbon-left" viewBox="0 0 360 270" preserveAspectRatio="xMinYMin meet">
-          <path d="M0 0 H360 C300 30 235 55 170 95 C105 135 50 195 0 262 Z" fill="url(#ribBlue)" />
-          <path d="M0 0 H360 C300 30 235 55 170 95" fill="none" stroke="#ffffff" strokeOpacity="0.28" strokeWidth="3" />
-          <path d="M0 0 H235 C190 35 140 65 100 105 C60 145 28 185 0 228 Z" fill="url(#ribMaroon)" />
-          <path d="M60 0 C40 40 20 70 0 100" fill="none" stroke="#ffffff" strokeOpacity="0.18" strokeWidth="10" strokeLinecap="round" />
-          <path d="M238 -4 C190 35 140 66 100 106 C60 146 28 186 -4 232" fill="none" stroke="url(#ribGold)" strokeWidth="6" strokeLinecap="round" />
-          <path d="M258 -4 C205 40 155 72 115 112 C75 152 40 196 6 245" fill="none" stroke="url(#ribGold)" strokeWidth="1.6" strokeLinecap="round" opacity="0.8" />
-        </svg>
-        <svg className="hero-ribbon hero-ribbon-right" viewBox="0 0 360 270" preserveAspectRatio="xMinYMin meet">
-          <path d="M0 0 H360 C300 30 235 55 170 95 C105 135 50 195 0 262 Z" fill="url(#ribMaroon)" />
-          <path d="M0 0 H360 C300 30 235 55 170 95" fill="none" stroke="#ffffff" strokeOpacity="0.28" strokeWidth="3" />
-          <path d="M0 0 H235 C190 35 140 65 100 105 C60 145 28 185 0 228 Z" fill="url(#ribBlue)" />
-          <path d="M60 0 C40 40 20 70 0 100" fill="none" stroke="#ffffff" strokeOpacity="0.18" strokeWidth="10" strokeLinecap="round" />
-          <path d="M238 -4 C190 35 140 66 100 106 C60 146 28 186 -4 232" fill="none" stroke="url(#ribGold)" strokeWidth="6" strokeLinecap="round" />
-          <path d="M258 -4 C205 40 155 72 115 112 C75 152 40 196 6 245" fill="none" stroke="url(#ribGold)" strokeWidth="1.6" strokeLinecap="round" opacity="0.8" />
-        </svg>
-        {/* Central warm glow */}
-        <div className="absolute top-[18%] left-1/2 -translate-x-1/2 w-[min(110vw,760px)] h-[420px] rounded-full bg-[radial-gradient(closest-side,rgba(255,214,120,0.18),transparent)] animate-[heroBreath_7s_ease-in-out_infinite]" />
-        {/* School-colour light pools */}
-        <div className="absolute top-[30%] -left-40 w-[460px] h-[460px] rounded-full bg-[radial-gradient(closest-side,rgba(190,25,50,0.4),transparent)] animate-[heroBreath_9s_ease-in-out_infinite]" />
-        <div className="absolute top-[40%] -right-40 w-[460px] h-[460px] rounded-full bg-[radial-gradient(closest-side,rgba(40,85,230,0.4),transparent)] animate-[heroBreath_9s_ease-in-out_4.5s_infinite]" />
+        <div className="hero-silk" />
+        {/* Gold spotlight from above */}
+        <div className="hero-spot" />
+        {/* Faint college silhouette behind the countdown */}
+        <img
+          src="/decor/campus.jpg"
+          alt=""
+          className="hero-silhouette"
+        />
+        {/* Gold satin ribbons in the corners */}
+        <GoldRibbon className="absolute top-0 left-0 w-[min(46vw,330px)] h-auto -scale-y-100 opacity-95 drop-shadow-[0_6px_14px_rgba(0,0,0,0.5)]" />
+        <GoldRibbon className="absolute bottom-0 right-0 w-[min(46vw,330px)] h-auto -scale-x-100 opacity-95 drop-shadow-[0_-6px_14px_rgba(0,0,0,0.5)]" />
         {/* Rising gold sparkles */}
         {SPARKLES.map((s, i) => (
           <span
             key={i}
-            className={`hero-sparkle hero-sparkle-${s.tone}`}
+            className="hero-sparkle"
             style={{
               left: `${s.left}%`,
               width: s.size,
@@ -133,149 +145,156 @@ export default function HeroSection() {
             }}
           />
         ))}
+        {/* soft fade into the next section */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#050b2a]" />
       </div>
 
-      {/* ===== Crest with rotating golden rays ===== */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.6, filter: 'blur(12px)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        transition={{ duration: 2.4, delay: 0.2, ease: EASE }}
-        className="relative"
-      >
-        <div className="absolute -inset-20 sm:-inset-24 rounded-full bg-[repeating-conic-gradient(from_0deg,rgba(255,225,150,0.28)_0deg_3deg,transparent_3deg_14deg)] [mask-image:radial-gradient(closest-side,black_15%,transparent_75%)] [-webkit-mask-image:radial-gradient(closest-side,black_15%,transparent_75%)] animate-[spin_60s_linear_infinite]" />
-        <div className="absolute -inset-8 rounded-full bg-[radial-gradient(closest-side,rgba(255,214,120,0.55),rgba(255,190,80,0.15)_55%,transparent)] animate-[heroBreath_5s_ease-in-out_infinite]" />
-        <Crest className="relative w-28 h-32 sm:w-36 sm:h-40 mx-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)] animate-float-slow" />
+      {/* ===== COLOURS NIGHT ===== */}
+      <motion.div {...fadeUp(0.2)} className="flex items-center justify-center gap-4 w-[min(90%,560px)]">
+        <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#d9b45a]" />
+        <span className="font-cinzel text-[min(4vw,1.15rem)] tracking-[0.35em] pl-[0.35em] uppercase text-gold-subtle whitespace-nowrap">
+          Colours Night
+        </span>
+        <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#d9b45a]" />
       </motion.div>
 
+      {/* ===== Crest ===== */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7, filter: 'blur(12px)' }}
+        animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+        transition={{ duration: 2.2, delay: 0.6, ease: EASE }}
+        className="relative mt-6"
+      >
+        <div className="absolute -inset-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,214,120,0.45),rgba(255,190,80,0.12)_55%,transparent)] animate-[heroBreath_6s_ease-in-out_infinite]" />
+        <Crest className="relative h-[clamp(110px,17vh,170px)] w-auto aspect-[372/420] mx-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.6)]" />
+      </motion.div>
+
+      {/* ===== Invitation line ===== */}
       <motion.p
-        {...fadeUp(1.2)}
-        className="mt-8 font-cinzel text-xs sm:text-sm tracking-[0.45em] uppercase text-[#f4efe6] [text-shadow:0_2px_10px_rgba(0,0,0,0.9)]"
+        {...fadeUp(1.4)}
+        className="mt-7 font-cinzel font-semibold text-[min(5.2vw,1.9rem)] tracking-[0.2em] pl-[0.2em] uppercase text-gold-gradient whitespace-nowrap drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
       >
         Maliyadeva College
       </motion.p>
-
       <motion.p
-        {...fadeUp(1.6)}
-        className="mt-2 font-serif-luxury italic text-base sm:text-lg text-[#f3e5ab] [text-shadow:0_2px_10px_rgba(0,0,0,0.9)]"
+        {...fadeUp(1.8)}
+        className="mt-2 font-serif-luxury italic text-[min(5.6vw,1.75rem)] text-[#f0cf7a] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
       >
         cordially invites you to the
       </motion.p>
 
+      <div className="mt-4 w-full flex justify-center">
+        <DiamondDivider delay={2.2} />
+      </div>
+
       {/* ===== Title ===== */}
-      <h1 className="mt-6 font-cinzel font-bold uppercase leading-[0.95]">
+      <h1 className="mt-3 font-cinzel font-bold uppercase leading-none">
         <span className="sr-only">Colours Awarding Ceremony</span>
-        <span aria-hidden="true" className="relative flex justify-center text-[clamp(3rem,14.5vw,8.5rem)] tracking-[0.06em] colours-word">
-          {/* soft glow behind the word */}
-          <span className="absolute inset-x-[10%] inset-y-[20%] -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,200,90,0.35),transparent)] blur-2xl animate-[heroBreath_6s_ease-in-out_infinite]" />
+        <span aria-hidden="true" className="relative flex justify-center text-[clamp(3.2rem,16vw,8.5rem)] tracking-[0.03em]">
+          <span className="absolute inset-x-[5%] inset-y-[10%] -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,200,90,0.32),transparent)] blur-2xl animate-[heroBreath_6s_ease-in-out_infinite]" />
           {TITLE.split('').map((ch, i) => (
             <motion.span
               key={i}
-              initial={{ opacity: 0, y: 50, filter: 'blur(14px)', rotateX: 70 }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)', rotateX: 0 }}
-              transition={{ duration: 1.6, delay: 2.0 + i * 0.18, ease: EASE }}
-              className="relative inline-block"
+              initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 1.6, delay: 2.5 + i * 0.16, ease: EASE }}
+              className="inline-block"
             >
-              {/* gold bevel rim sits behind the coloured letter */}
-              <span className="jewel-rim">{ch}</span>
-              <span
-                className={`relative jewel-letter jewel-${LETTER_TONES[i % LETTER_TONES.length]}`}
-                style={{ animationDelay: `${3.6 + i * 0.12}s` }}
-              >
+              <span className="gold-3d" style={{ animationDelay: `${4.5 + i * 0.12}s` }}>
                 {ch}
               </span>
-              {/* Twinkling star glints on a few letters */}
-              {GLINTS[i] && (
-                <svg
-                  viewBox="0 0 24 24"
-                  className="jewel-glint"
-                  style={{ top: GLINTS[i].top, left: GLINTS[i].left, animationDelay: GLINTS[i].delay }}
-                >
-                  <path d="M12 0 C13 8 16 11 24 12 C16 13 13 16 12 24 C11 16 8 13 0 12 C8 11 11 8 12 0 Z" fill="#fff" />
-                </svg>
-              )}
             </motion.span>
           ))}
         </span>
-        {/* Ceremonial sash: maroon → royal blue with gold borders; always one line */}
+        {/* Golden light streak spreading out to both sides */}
+        <span aria-hidden="true" className="relative block w-full h-[clamp(22px,5vw,36px)]">
+          <motion.span
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 2.2, delay: 3.6, ease: EASE }}
+            className="gold-streak"
+          >
+            <span className="gold-streak-glow" />
+            <span className="gold-streak-line" />
+            <span className="gold-streak-core" />
+          </motion.span>
+        </span>
         <motion.span
           aria-hidden="true"
-          initial={{ opacity: 0, scaleX: 0.4 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 1.8, delay: 3.4, ease: EASE }}
-          className="mt-5 flex justify-center"
+          initial={{ opacity: 0, letterSpacing: '0.5em' }}
+          animate={{ opacity: 1, letterSpacing: '0.2em' }}
+          transition={{ duration: 2.2, delay: 3.8, ease: EASE }}
+          className="block whitespace-nowrap font-cinzel font-semibold text-[min(6.2vw,2.6rem)] pl-[0.2em] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.65)]"
         >
-          <span className="ceremony-sash">
-            <span className="ceremony-sash-inner hero-sheen">
-              <span className="relative text-gold-gradient font-semibold whitespace-nowrap text-[min(3.9vw,1.75rem)] tracking-[0.24em] pl-[0.24em]">
-                Awarding Ceremony
-              </span>
-            </span>
-          </span>
+          Awarding Ceremony
         </motion.span>
       </h1>
 
-      <div className="mt-8 flex items-center gap-4">
-        <motion.span {...drawLine(4.2)} className="h-px w-10 sm:w-20 bg-gradient-to-r from-transparent to-[#f5d77f] origin-right" />
-        <motion.span {...fadeUp(4.0, 1.6)} className="font-serif-luxury text-2xl sm:text-3xl text-gold-subtle tracking-widest">
-          2024 / 2025
-        </motion.span>
-        <motion.span {...drawLine(4.2)} className="h-px w-10 sm:w-20 bg-gradient-to-l from-transparent to-[#f5d77f] origin-left" />
+      <div className="mt-4 w-full flex justify-center">
+        <FlourishDivider delay={4.4} />
       </div>
 
-      <motion.div {...drawLine(4.6)} className="tricolour-rule w-56 sm:w-72 mt-7 h-[3px]" />
+      {/* ===== Year ===== */}
+      <div className="mt-4 flex items-center justify-center gap-4 w-[min(88%,560px)]">
+        <motion.span {...drawLine(4.8)} className="h-px flex-1 origin-right bg-gradient-to-r from-transparent to-[#d9b45a]" />
+        <motion.span {...fadeUp(4.7, 1.6)} className="font-cinzel font-semibold text-[min(6.4vw,2.2rem)] tracking-[0.12em] text-gold-gradient whitespace-nowrap">
+          2024 / 2025
+        </motion.span>
+        <motion.span {...drawLine(4.8)} className="h-px flex-1 origin-left bg-gradient-to-l from-transparent to-[#d9b45a]" />
+      </div>
 
-      {/* ===== Countdown ===== */}
+      {/* ===== Countdown box ===== */}
       <motion.div
-        {...fadeUp(5.0, 1.8)}
-        className="relative mt-12 w-full max-w-md"
+        {...fadeUp(5.3, 1.8)}
+        className="hero-sheen relative mt-10 sm:mt-14 w-full max-w-xl rounded-2xl p-[1.5px] bg-[linear-gradient(135deg,#8a6318,#fff1b8_25%,#d9a52a_50%,#fff1b8_75%,#8a6318)] shadow-[0_14px_40px_rgba(0,0,0,0.6),0_0_30px_rgba(212,175,55,0.18)] overflow-hidden"
       >
-        <p className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.35em] uppercase text-[#f3e5ab] mb-4 [text-shadow:0_2px_8px_rgba(0,0,0,0.8)]">
-          Wednesday · 2nd December 2026
-        </p>
-        <div className="grid grid-cols-4 gap-2 sm:gap-3">
-          {[
-            ['Days', t.days],
-            ['Hours', t.hours],
-            ['Minutes', t.minutes],
-            ['Seconds', t.seconds],
-          ].map(([label, val], i) => {
-            const text = String(val).padStart(2, '0');
-            const accent = ['#c8102e', '#e8b931', '#2f6bff', '#e8b931'][i];
-            return (
-              <div
-                key={label as string}
-                className="hero-sheen relative flex flex-col items-center rounded-xl border border-white/10 bg-[linear-gradient(180deg,rgba(20,38,120,0.55),rgba(5,11,42,0.85))] backdrop-blur-md py-3 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.45)]"
-                style={{ boxShadow: `0 10px 30px rgba(0,0,0,0.45), 0 0 22px ${accent}33` }}
-              >
-                <span className="absolute inset-x-0 top-0 h-[3px]" style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }} />
-                <span className="relative h-9 sm:h-10 overflow-hidden font-cinzel text-2xl sm:text-3xl font-semibold tabular-nums">
-                  <AnimatePresence mode="popLayout" initial={false}>
-                    <motion.span
-                      key={text}
-                      initial={reduce ? false : { y: '-100%', opacity: 0, filter: 'blur(4px)' }}
-                      animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
-                      exit={reduce ? undefined : { y: '100%', opacity: 0, filter: 'blur(4px)' }}
-                      transition={{ duration: 0.7, ease: EASE }}
-                      className="block text-gold-gradient"
-                    >
-                      {text}
-                    </motion.span>
-                  </AnimatePresence>
-                </span>
-                <span className="mt-1 text-[9px] tracking-[0.25em] uppercase text-neutral-400 font-sans-modern">
-                  {label}
-                </span>
-              </div>
-            );
-          })}
+        <div className="rounded-[15px] bg-[linear-gradient(180deg,rgba(8,16,60,0.92),rgba(4,9,36,0.96))] px-3 sm:px-6 pt-4 pb-4">
+          <p className="font-cinzel text-[min(3.6vw,1.05rem)] tracking-[0.22em] uppercase text-[#f0cf7a] whitespace-nowrap">
+            Wednesday · 2nd December 2026
+          </p>
+          <div className="mt-3 h-px bg-gradient-to-r from-transparent via-[#d9b45a] to-transparent" />
+          <div className="mt-3 grid grid-cols-4">
+            {[
+              ['Days', t.days],
+              ['Hours', t.hours],
+              ['Minutes', t.minutes],
+              ['Seconds', t.seconds],
+            ].map(([label, val], i) => {
+              const text = String(val).padStart(2, '0');
+              return (
+                <div
+                  key={label as string}
+                  className={`flex flex-col items-center ${i > 0 ? 'border-l border-[#d9b45a]/60' : ''}`}
+                >
+                  <span className="relative h-[clamp(36px,9vw,52px)] overflow-hidden font-cinzel font-semibold text-[clamp(1.7rem,7.5vw,2.6rem)] leading-none tabular-nums">
+                    <AnimatePresence mode="popLayout" initial={false}>
+                      <motion.span
+                        key={text}
+                        initial={reduce ? false : { y: '-100%', opacity: 0, filter: 'blur(4px)' }}
+                        animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
+                        exit={reduce ? undefined : { y: '100%', opacity: 0, filter: 'blur(4px)' }}
+                        transition={{ duration: 0.7, ease: EASE }}
+                        className="block pt-1 text-gold-gradient"
+                      >
+                        {text}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
+                  <span className="mt-1 font-cinzel text-[min(2.8vw,0.85rem)] tracking-[0.18em] uppercase text-[#e6cf8f]">
+                    {label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </motion.div>
 
       <motion.button
-        {...fadeUp(5.8, 1.4)}
+        {...fadeUp(6.0, 1.4)}
         onClick={() => document.getElementById('details')?.scrollIntoView({ behavior: 'smooth' })}
         aria-label="Scroll to event details"
-        className="mt-14 flex flex-col items-center gap-1 text-[#d4af37]/80 hover:text-[#fae596] transition-colors"
+        className="mt-10 flex flex-col items-center gap-1 text-[#d4af37]/80 hover:text-[#fae596] transition-colors"
       >
         <span className="font-cinzel text-[10px] tracking-[0.3em] uppercase">Details</span>
         <ChevronDown className="w-4 h-4 animate-bounce" />
