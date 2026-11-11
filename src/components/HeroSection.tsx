@@ -188,7 +188,7 @@ export default function HeroSection() {
       </div>
 
       {/* ===== Title ===== */}
-      <h1 className="mt-3 font-cinzel font-bold uppercase leading-none">
+      <h1 className="mt-3 w-full font-cinzel font-bold uppercase leading-none">
         <span className="sr-only">Colours Awarding Ceremony</span>
         <span aria-hidden="true" className="relative flex justify-center text-[clamp(3.2rem,16vw,8.5rem)] tracking-[0.03em]">
           <span className="absolute inset-x-[5%] inset-y-[10%] -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,200,90,0.32),transparent)] blur-2xl animate-[heroBreath_6s_ease-in-out_infinite]" />
@@ -221,10 +221,10 @@ export default function HeroSection() {
         </span>
         <motion.span
           aria-hidden="true"
-          initial={{ opacity: 0, letterSpacing: '0.5em' }}
-          animate={{ opacity: 1, letterSpacing: '0.2em' }}
+          initial={{ opacity: 0, letterSpacing: '0.4em' }}
+          animate={{ opacity: 1, letterSpacing: '0.16em' }}
           transition={{ duration: 2.2, delay: 3.8, ease: EASE }}
-          className="block whitespace-nowrap font-cinzel font-semibold text-[min(6.2vw,2.6rem)] pl-[0.2em] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.65)]"
+          className="block whitespace-nowrap font-cinzel font-semibold text-[min(5.1vw,2.6rem)] pl-[0.16em] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.65)]"
         >
           Awarding Ceremony
         </motion.span>
