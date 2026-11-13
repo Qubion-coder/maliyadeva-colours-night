@@ -315,7 +315,7 @@ body {
   top: 50%;
   height: 2px;
   margin-top: -1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(232, 185, 49, 0.5) 18%, #ffe9a8 40%, #ffffff 50%, #ffe9a8 60%, rgba(232, 185, 49, 0.5) 82%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(232, 185, 49, 0.45) 18%, rgba(245, 215, 127, 0.85) 40%, #f8e3a0 50%, rgba(245, 215, 127, 0.85) 60%, rgba(232, 185, 49, 0.45) 82%, transparent 100%);
 }
 .gold-streak-glow {
   position: absolute;
@@ -324,7 +324,7 @@ body {
   top: 50%;
   height: 14px;
   margin-top: -7px;
-  background: linear-gradient(90deg, transparent, rgba(255, 200, 90, 0.55) 30%, rgba(255, 230, 160, 0.9) 50%, rgba(255, 200, 90, 0.55) 70%, transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 200, 90, 0.3) 30%, rgba(255, 220, 140, 0.45) 50%, rgba(255, 200, 90, 0.3) 70%, transparent);
   filter: blur(8px);
 }
 .gold-streak-core {
@@ -334,7 +334,7 @@ body {
   width: min(40vw, 180px);
   height: 36px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(closest-side, #ffffff 0%, rgba(255, 240, 190, 0.9) 25%, rgba(255, 200, 90, 0.35) 60%, transparent 100%);
+  background: radial-gradient(closest-side, rgba(255, 236, 180, 0.55) 0%, rgba(255, 214, 130, 0.3) 35%, rgba(255, 200, 90, 0.1) 65%, transparent 100%);
   filter: blur(2px);
 }
 @keyframes streakPulse {
