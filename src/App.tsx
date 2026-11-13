@@ -14,7 +14,7 @@ export default function App() {
   const [showIntro, setShowIntro] = useState(true);
   const [introKey, setIntroKey] = useState(0);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  // Personal link (?to=...) → Coloursman's name on the opening screen
+  // Personal link (?to=...) → guest's name on the opening screen
   const [guestName] = useState(() => readGuestName());
 
   const startMusic = async () => {

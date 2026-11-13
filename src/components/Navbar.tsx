@@ -15,8 +15,8 @@ export default function Navbar({ isMusicPlaying, onToggleMusic }: NavbarProps) {
           className="flex items-center gap-2.5 text-left"
         >
           <Crest className="w-7 h-8" />
-          <span className="font-cinzel text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-[#fae596]">
-            Colours Night
+          <span className="font-cinzel whitespace-nowrap text-[min(2.9vw,12px)] sm:text-xs font-semibold tracking-[0.14em] sm:tracking-[0.22em] uppercase text-[#fae596]">
+            Colours Awarding Ceremony
             <span className="hidden sm:inline text-[#a88a44] font-normal"> · 2024/25</span>
           </span>
         </button>

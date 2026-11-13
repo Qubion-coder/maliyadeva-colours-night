@@ -15,7 +15,6 @@ const STORE_TEMPLATE = 'mdc-colours-template';
 
 const DEFAULT_TEMPLATE = `Dear {name},
 
-Congratulations on being awarded College Colours! 🏅
 You are cordially invited to the Maliyadeva College Colours Awarding Ceremony 2024/2025.
 
 📅 Wednesday, 2nd December 2026
@@ -65,7 +64,7 @@ export default function AdminPage() {
 
   // Keep this page out of search engines
   useEffect(() => {
-    document.title = 'Admin · Colours Invitations';
+    document.title = 'Admin · Personal Invitations';
     const meta = document.createElement('meta');
     meta.name = 'robots';
     meta.content = 'noindex, nofollow';
@@ -125,7 +124,7 @@ export default function AdminPage() {
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'coloursmen-invitations.csv';
+    a.download = 'personal-invitations.csv';
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -146,12 +145,12 @@ export default function AdminPage() {
           <Crest className="w-12 h-14" />
           <div>
             <p className="font-cinzel text-[11px] tracking-[0.3em] uppercase text-[#c9b177]">Maliyadeva College</p>
-            <h1 className="font-cinzel text-xl sm:text-2xl font-semibold text-gold-gradient">Coloursmen Invitations</h1>
+            <h1 className="font-cinzel text-xl sm:text-2xl font-semibold text-gold-gradient">Personal Invitations</h1>
           </div>
         </header>
         <p className="mt-4 text-sm text-[#d8ccb4] leading-relaxed">
-          Add each Coloursman's name to create a personal link. Their name appears on the opening screen of the
-          invitation. The normal link (without a name) still works for everyone else.
+          Add each guest's name (management, merit holders, Coloursmen…) to create a personal link. Their name
+          appears on the opening screen of the invitation. The normal link (without a name) still works for everyone else.
         </p>
 
         {/* Add names */}
@@ -201,7 +200,7 @@ export default function AdminPage() {
         <section className="mt-8">
           <div className="flex flex-wrap items-center gap-3 justify-between">
             <h2 className="flex items-center gap-2 font-cinzel text-sm tracking-[0.2em] uppercase text-[#f5d77f]">
-              <Users className="w-4 h-4" /> {guests.length} Coloursmen
+              <Users className="w-4 h-4" /> {guests.length} guests
               <span className="text-[#a9a08a] normal-case tracking-normal font-sans-modern text-xs">· {sentCount} sent</span>
             </h2>
             <div className="flex items-center gap-2">

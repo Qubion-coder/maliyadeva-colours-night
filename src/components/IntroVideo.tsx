@@ -9,7 +9,7 @@ interface IntroVideoProps {
   onStart: () => void;
   isMusicPlaying: boolean;
   onToggleMusic: () => void;
-  /** Coloursman's name from a personal link; null shows the general invitation. */
+  /** Guest's name from a personal link; null shows the general invitation. */
   guestName?: string | null;
 }
 
@@ -174,18 +174,13 @@ export default function IntroVideo({ onFinish, onStart, isMusicPlaying, onToggle
 
                     {guestName ? (
                       <>
-                        {/* Personalised greeting for a Coloursman */}
+                        {/* Personalised greeting for the guest */}
                         <p className="mt-[clamp(8px,2svh,18px)] font-serif-luxury italic text-[min(4.6vw,2.4svh)] md:text-[clamp(1rem,2.4svh,1.35rem)] text-[#f3e5ab] drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
                           Dear
                         </p>
                         <p className={`mt-1 max-w-[92%] font-cinzel font-bold uppercase tracking-[0.06em] leading-[1.15] text-gold-shimmer drop-shadow-[0_3px_10px_rgba(0,0,0,0.7)] break-words ${nameSize}`}>
                           {guestName}
                         </p>
-                        <span className="mt-[clamp(6px,1.4svh,12px)] inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#e8c15a]/50 bg-[#050b2a]/50 backdrop-blur-sm font-cinzel text-[min(2.6vw,11px)] tracking-[0.25em] uppercase text-[#f5d77f]">
-                          <span className="w-1 h-1 rotate-45 bg-[#f5d77f]" />
-                          Coloursman · 2024/2025
-                          <span className="w-1 h-1 rotate-45 bg-[#f5d77f]" />
-                        </span>
                         <h1 className="mt-[clamp(6px,1.6svh,16px)] font-script text-[min(8vw,4.6svh)] md:text-[clamp(1.9rem,4.2svh,2.8rem)] leading-[1.05] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)] px-2">
                           Your Invitation Awaits
                         </h1>

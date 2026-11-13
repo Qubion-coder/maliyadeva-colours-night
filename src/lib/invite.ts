@@ -1,5 +1,5 @@
 /**
- * Personal invitation links for Coloursmen.
+ * Personal invitation links (management, merit holders, Coloursmen…).
  *
  * The guest's name travels inside the link itself (?to=<code>), so no server
  * or database is needed: anyone opening the link sees their own name on the
