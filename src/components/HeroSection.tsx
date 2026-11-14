@@ -5,20 +5,24 @@ import Crest from './Crest';
 
 export const EVENT_DATE = new Date('2026-12-02T15:00:00+05:30');
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+/** Very soft ease-out: starts gently and glides to a stop */
+const EASE = [0.16, 1, 0.3, 1] as const;
+/** Pace of the entrance: durations ×1.5, start times ×1.35 (slower, more graceful) */
+const DUR = 1.5;
+const AT = 1.35;
 
 /** Slow, cinematic fade-up */
 const fadeUp = (delay = 0, duration = 1.8) => ({
   initial: { opacity: 0, y: 26, filter: 'blur(6px)' },
   animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
-  transition: { duration, delay, ease: EASE },
+  transition: { duration: duration * DUR, delay: delay * AT, ease: EASE },
 });
 
 /** A line that draws outward from its centre */
 const drawLine = (delay = 0) => ({
   initial: { scaleX: 0, opacity: 0 },
   animate: { scaleX: 1, opacity: 1 },
-  transition: { duration: 1.6, delay, ease: EASE },
+  transition: { duration: 1.6 * DUR, delay: delay * AT, ease: EASE },
 });
 
 function useCountdown(target: Date) {
@@ -44,7 +48,7 @@ const SPARKLES = Array.from({ length: 18 }, (_, i) => ({
   left: (i * 37) % 100,
   size: 2 + ((i * 7) % 3),
   delay: (i * 1.3) % 14,
-  duration: 14 + ((i * 5) % 10),
+  duration: 20 + ((i * 5) % 12),
 }));
 
 const TITLE = 'COLOURS';
@@ -128,8 +132,7 @@ export default function HeroSection() {
           alt=""
           className="hero-silhouette"
         />
-        {/* Gold satin ribbons in the corners */}
-        <GoldRibbon className="absolute top-0 left-0 w-[min(46vw,330px)] h-auto -scale-y-100 opacity-95 drop-shadow-[0_6px_14px_rgba(0,0,0,0.5)]" />
+        {/* Gold satin ribbon in the bottom-right corner */}
         <GoldRibbon className="absolute bottom-0 right-0 w-[min(46vw,330px)] h-auto -scale-x-100 opacity-95 drop-shadow-[0_-6px_14px_rgba(0,0,0,0.5)]" />
         {/* Rising gold sparkles */}
         {SPARKLES.map((s, i) => (
@@ -149,24 +152,15 @@ export default function HeroSection() {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#050b2a]" />
       </div>
 
-      {/* ===== COLOURS NIGHT ===== */}
-      <motion.div {...fadeUp(0.2)} className="flex items-center justify-center gap-4 w-[min(90%,560px)]">
-        <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#d9b45a]" />
-        <span className="font-cinzel text-[min(4vw,1.15rem)] tracking-[0.35em] pl-[0.35em] uppercase text-gold-subtle whitespace-nowrap">
-          Colours Night
-        </span>
-        <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#d9b45a]" />
-      </motion.div>
-
       {/* ===== Crest ===== */}
       <motion.div
         initial={{ opacity: 0, scale: 0.7, filter: 'blur(12px)' }}
         animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        transition={{ duration: 2.2, delay: 0.6, ease: EASE }}
-        className="relative mt-6"
+        transition={{ duration: 2.2 * DUR, delay: 0.6 * AT, ease: EASE }}
+        className="relative"
       >
-        <div className="absolute -inset-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,214,120,0.45),rgba(255,190,80,0.12)_55%,transparent)] animate-[heroBreath_6s_ease-in-out_infinite]" />
-        <Crest className="relative h-[clamp(110px,17vh,170px)] w-auto aspect-[372/420] mx-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.6)]" />
+        <div className="absolute -inset-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,214,120,0.45),rgba(255,190,80,0.12)_55%,transparent)] animate-[heroBreath_10s_ease-in-out_infinite]" />
+        <Crest className="relative h-[clamp(110px,17vh,170px)] w-auto aspect-[372/420] mx-auto drop-shadow-[0_10px_24px_rgba(0,0,0,0.6)] crest-float" />
       </motion.div>
 
       {/* ===== Invitation line ===== */}
@@ -191,16 +185,16 @@ export default function HeroSection() {
       <h1 className="mt-3 w-full font-cinzel font-bold uppercase leading-none">
         <span className="sr-only">Colours Awarding Ceremony</span>
         <span aria-hidden="true" className="relative flex justify-center text-[clamp(3.2rem,16vw,8.5rem)] tracking-[0.03em]">
-          <span className="absolute inset-x-[5%] inset-y-[10%] -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,200,90,0.32),transparent)] blur-2xl animate-[heroBreath_6s_ease-in-out_infinite]" />
+          <span className="absolute inset-x-[5%] inset-y-[10%] -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(255,200,90,0.32),transparent)] blur-2xl animate-[heroBreath_10s_ease-in-out_infinite]" />
           {TITLE.split('').map((ch, i) => (
             <motion.span
               key={i}
               initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 1.6, delay: 2.5 + i * 0.16, ease: EASE }}
+              transition={{ duration: 1.6 * DUR, delay: (2.5 + i * 0.2) * AT, ease: EASE }}
               className="inline-block"
             >
-              <span className="gold-3d" style={{ animationDelay: `${4.5 + i * 0.12}s` }}>
+              <span className="gold-3d" style={{ animationDelay: `${7 + i * 0.15}s` }}>
                 {ch}
               </span>
             </motion.span>
@@ -211,7 +205,7 @@ export default function HeroSection() {
           <motion.span
             initial={{ scaleX: 0, opacity: 0 }}
             animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 2.2, delay: 3.6, ease: EASE }}
+            transition={{ duration: 2.2 * DUR, delay: 3.8 * AT, ease: EASE }}
             className="gold-streak"
           >
             <span className="gold-streak-glow" />
@@ -223,7 +217,7 @@ export default function HeroSection() {
           aria-hidden="true"
           initial={{ opacity: 0, letterSpacing: '0.4em' }}
           animate={{ opacity: 1, letterSpacing: '0.16em' }}
-          transition={{ duration: 2.2, delay: 3.8, ease: EASE }}
+          transition={{ duration: 2.2 * DUR, delay: 4.0 * AT, ease: EASE }}
           className="block whitespace-nowrap font-cinzel font-semibold text-[min(5.1vw,2.6rem)] pl-[0.16em] text-gold-gradient drop-shadow-[0_3px_10px_rgba(0,0,0,0.65)]"
         >
           Awarding Ceremony
@@ -273,7 +267,7 @@ export default function HeroSection() {
                         initial={reduce ? false : { y: '-100%', opacity: 0, filter: 'blur(4px)' }}
                         animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
                         exit={reduce ? undefined : { y: '100%', opacity: 0, filter: 'blur(4px)' }}
-                        transition={{ duration: 0.7, ease: EASE }}
+                        transition={{ duration: 0.9, ease: EASE }}
                         className="block pt-1 text-gold-gradient"
                       >
                         {text}

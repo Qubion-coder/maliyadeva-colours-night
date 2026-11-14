@@ -253,7 +253,7 @@ body {
     linear-gradient(130deg, transparent 80%, rgba(60, 100, 240, 0.25) 88%, transparent 96%),
     radial-gradient(120% 80% at 50% 0%, #0f2280 0%, #08154f 45%, #040b30 100%);
   filter: blur(14px);
-  animation: silkDrift 30s ease-in-out infinite alternate;
+  animation: silkDrift 45s ease-in-out infinite alternate;
 }
 @keyframes silkDrift {
   0% { transform: translate3d(0, 0, 0) scale(1); }
@@ -274,7 +274,7 @@ body {
   clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
   filter: blur(18px);
   mix-blend-mode: screen;
-  animation: spotGlow 8s ease-in-out infinite;
+  animation: spotGlow 12s ease-in-out infinite;
 }
 @keyframes spotGlow {
   0%, 100% { opacity: 0.75; }
@@ -306,7 +306,7 @@ body {
   margin-left: calc(min(118vw, 980px) / -2);
   transform-origin: 50% 50%;
   pointer-events: none;
-  animation: streakPulse 5s ease-in-out 6s infinite;
+  animation: streakPulse 9s ease-in-out 10s infinite;
 }
 .gold-streak-line {
   position: absolute;
@@ -360,7 +360,7 @@ body {
     drop-shadow(0 3px 0 #6e4c0b)
     drop-shadow(0 10px 14px rgba(0, 0, 0, 0.6))
     drop-shadow(0 0 18px rgba(255, 200, 90, 0.35));
-  animation: goldShine 8s ease-in-out infinite;
+  animation: goldShine 12s ease-in-out infinite;
 }
 @keyframes goldShine {
   0%, 60% { background-position: 160% 0, 0 0; }
@@ -370,3 +370,11 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .hero-silk, .hero-spot, .gold-3d, .gold-streak { animation: none !important; }
 }
+
+/* Crest floats very gently */
+.crest-float { animation: crestFloat 9s ease-in-out infinite; }
+@keyframes crestFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@media (prefers-reduced-motion: reduce) { .crest-float { animation: none; } }
