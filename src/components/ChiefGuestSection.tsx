@@ -28,10 +28,10 @@ export default function ChiefGuestSection() {
             Mr. Abeyrathna Jayasundara
           </h3>
           <p className="relative mt-5 font-serif-luxury italic text-lg sm:text-xl text-[#e6dcc8] leading-relaxed">
-            Founder Chairman
+            Chairman
           </p>
           <p className="relative font-cinzel text-xs sm:text-sm tracking-[0.2em] uppercase text-[#d8ccb4]">
-            Analytical Instruments (Pvt) Ltd
+            AJ RJ Group
           </p>
         </div>
       </motion.div>
