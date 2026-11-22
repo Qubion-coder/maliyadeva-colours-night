@@ -218,7 +218,10 @@ export default function AdminPage() {
             </button>
             <p className="text-xs text-[#a9a08a] leading-relaxed">
               Columns like <span className="text-[#f3e5ab]"># · Name · WhatsApp No</span>. The “#” column is ignored and
-              numbers like 0771234567 or 771234567 both work.
+              numbers like 0771234567 or 771234567 both work.{' '}
+              <a href="/guest-list-template.xlsx" download className="text-[#f5d77f] underline underline-offset-4 whitespace-nowrap">
+                Download Excel template
+              </a>
             </p>
             <input
               ref={fileRef}
