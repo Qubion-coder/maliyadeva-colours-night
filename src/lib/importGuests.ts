@@ -109,15 +109,24 @@ function parseCsv(src: string): string[][] {
 
 /** Reads an uploaded .xlsx or .csv file */
 export async function fileToGuests(file: File): Promise<ImportedGuest[]> {
-  const lower = file.name.toLowerCase();
-  if (lower.endsWith('.csv') || lower.endsWith('.txt') || file.type === 'text/csv') {
-    return rowsToGuests(parseCsv((await file.text()).replace(/^﻿/, '')));
+  // Decide by what's inside the file, not its name: files saved as text but
+  // named ".xlsx" (common when rows are copied out of Excel) still import.
+  // Read the file once into memory and use that copy for everything
+  // (some browsers refuse a second read of a picked file).
+  const buffer = await file.arrayBuffer();
+  const head = new Uint8Array(buffer, 0, Math.min(8, buffer.byteLength));
+  const isZip = head[0] === 0x50 && head[1] === 0x4b; // "PK" — a real .xlsx
+  const isOldXls = head[0] === 0xd0 && head[1] === 0xcf && head[2] === 0x11 && head[3] === 0xe0;
+
+  if (isOldXls) {
+    throw new Error('This is an old Excel (.xls) file — in Excel use "Save As" → "Excel Workbook (.xlsx)" and upload again.');
   }
-  if (lower.endsWith('.xls')) {
-    throw new Error('Old .xls files are not supported — in Excel use "Save As" → "Excel Workbook (.xlsx)" or CSV.');
+  if (!isZip) {
+    // Plain text: tab-separated (copied from Excel) or CSV
+    return rowsToGuests(parseCsv(new TextDecoder().decode(buffer).replace(/^﻿/, '')));
   }
   // Loaded only when needed so the invitation page stays light
   const { readSheet } = await import('read-excel-file/browser');
-  const rows = await readSheet(file);
+  const rows = await readSheet(buffer);
   return rowsToGuests(rows as Cell[][]);
 }
