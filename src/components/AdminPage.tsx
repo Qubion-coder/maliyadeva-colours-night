@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Check, Copy, Download, ExternalLink, Plus, Send, Trash2, Users } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Check, Copy, Download, ExternalLink, FileSpreadsheet, Plus, Send, SkipForward, Trash2, Users } from 'lucide-react';
 import Crest from './Crest';
-import { buildInviteLink, cleanName, toWhatsAppNumber } from '../lib/invite';
+import { buildInviteLink, toWhatsAppNumber } from '../lib/invite';
+import { fileToGuests, textToGuests, type ImportedGuest } from '../lib/importGuests';
 
 interface Guest {
   id: string;
@@ -12,6 +13,10 @@ interface Guest {
 
 const STORE_GUESTS = 'mdc-colours-guests';
 const STORE_TEMPLATE = 'mdc-colours-template';
+const STORE_MODE = 'mdc-colours-wa-mode';
+
+/** How WhatsApp opens: 'auto' = wa.me (phones), 'web' = WhatsApp Web in one reused tab (computers) */
+type SendMode = 'auto' | 'web';
 
 const DEFAULT_TEMPLATE = `Dear {name},
 
@@ -41,26 +46,21 @@ function save(key: string, value: unknown) {
   }
 }
 
-/** "Name, 0771234567" or "Name<TAB>0771234567" or just "Name" */
-function parseLines(text: string): { name: string; phone: string }[] {
-  return text
-    .split(/\r?\n/)
-    .map((line) => {
-      const [name, ...rest] = line.split(/[,\t]/);
-      return { name: cleanName(name ?? ''), phone: rest.join(' ').trim() };
-    })
-    .filter((g) => g.name);
-}
-
 export default function AdminPage() {
   const [guests, setGuests] = useState<Guest[]>(() => load(STORE_GUESTS, []));
   const [template, setTemplate] = useState<string>(() => load(STORE_TEMPLATE, DEFAULT_TEMPLATE));
   const [input, setInput] = useState('');
   const [copied, setCopied] = useState<string | null>(null);
   const [filter, setFilter] = useState('');
+  const [mode, setMode] = useState<SendMode>(() => load(STORE_MODE, 'auto'));
+  const [notice, setNotice] = useState<{ ok: boolean; text: string } | null>(null);
+  // people skipped in this bulk-send session (go to the end of the queue)
+  const [skipped, setSkipped] = useState<string[]>([]);
+  const fileRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => save(STORE_GUESTS, guests), [guests]);
   useEffect(() => save(STORE_TEMPLATE, template), [template]);
+  useEffect(() => save(STORE_MODE, mode), [mode]);
 
   // Keep this page out of search engines
   useEffect(() => {
@@ -72,17 +72,56 @@ export default function AdminPage() {
     return () => meta.remove();
   }, []);
 
-  const addGuests = () => {
-    const parsed = parseLines(input);
-    if (!parsed.length) return;
-    setGuests((prev) => {
-      const existing = new Set(prev.map((g) => g.name.toLowerCase()));
-      const fresh = parsed
-        .filter((g) => !existing.has(g.name.toLowerCase()))
-        .map((g, i) => ({ id: `${Date.now()}-${i}`, name: g.name, phone: g.phone, sent: false }));
-      return [...prev, ...fresh];
+  /** Adds new names; for names already in the list, fills in a missing phone number */
+  const mergeGuests = (parsed: ImportedGuest[]) => {
+    const next = guests.map((g) => ({ ...g }));
+    const byName = new Map(next.map((g) => [g.name.toLowerCase(), g]));
+    let added = 0;
+    let updated = 0;
+    let duplicate = 0;
+    parsed.forEach((p, i) => {
+      const existing = byName.get(p.name.toLowerCase());
+      if (existing) {
+        if (!existing.phone && p.phone) { existing.phone = p.phone; updated++; }
+        else duplicate++;
+        return;
+      }
+      const g = { id: `${Date.now()}-${i}`, name: p.name, phone: p.phone, sent: false };
+      byName.set(p.name.toLowerCase(), g);
+      next.push(g);
+      added++;
     });
+    setGuests(next);
+    const noPhone = parsed.filter((p) => !toWhatsAppNumber(p.phone)).length;
+    const parts = [`${added} added`];
+    if (updated) parts.push(`${updated} numbers filled in`);
+    if (duplicate) parts.push(`${duplicate} already in the list`);
+    if (noPhone) parts.push(`${noPhone} without a valid WhatsApp number`);
+    setNotice({ ok: true, text: parts.join(' · ') });
+  };
+
+  const addGuests = () => {
+    const parsed = textToGuests(input);
+    if (!parsed.length) return;
+    mergeGuests(parsed);
     setInput('');
+  };
+
+  const importFile = async (file: File | undefined) => {
+    if (!file) return;
+    setNotice({ ok: true, text: `Reading ${file.name}…` });
+    try {
+      const parsed = await fileToGuests(file);
+      if (!parsed.length) {
+        setNotice({ ok: false, text: 'No names found. Make sure the sheet has a "Name" column.' });
+        return;
+      }
+      mergeGuests(parsed);
+    } catch (err) {
+      setNotice({ ok: false, text: err instanceof Error ? err.message : 'Could not read that file.' });
+    } finally {
+      if (fileRef.current) fileRef.current.value = '';
+    }
   };
 
   const update = (id: string, patch: Partial<Guest>) =>
@@ -111,8 +150,20 @@ export default function AdminPage() {
   const whatsappUrl = (g: Guest) => {
     const num = toWhatsAppNumber(g.phone);
     const text = encodeURIComponent(messageFor(g));
+    if (mode === 'web') {
+      return num
+        ? `https://web.whatsapp.com/send?phone=${num}&text=${text}`
+        : `https://web.whatsapp.com/send?text=${text}`;
+    }
     return num ? `https://wa.me/${num}?text=${text}` : `https://wa.me/?text=${text}`;
   };
+  // WhatsApp Web reuses one tab instead of opening a new tab per person
+  const waTarget = mode === 'web' ? 'mdc-whatsapp' : '_blank';
+
+  /** Bulk sending queue: everyone with a valid number who hasn't been sent yet, in list order */
+  const queue = guests.filter((g) => !g.sent && toWhatsAppNumber(g.phone));
+  const withNumber = guests.filter((g) => toWhatsAppNumber(g.phone)).length;
+  const current = queue.find((g) => !skipped.includes(g.id)) ?? queue[0];
 
   const exportCsv = () => {
     const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
@@ -156,9 +207,36 @@ export default function AdminPage() {
         {/* Add names */}
         <section className="mt-8 rounded-2xl border border-[#d4af37]/25 bg-[#0b1650]/60 p-4 sm:p-6">
           <h2 className="font-cinzel text-sm tracking-[0.2em] uppercase text-[#f5d77f]">Add names</h2>
-          <p className="mt-1 text-xs text-[#a9a08a]">
-            One per line. Add a phone number after a comma to send straight to their WhatsApp —
-            e.g. <span className="text-[#f3e5ab]">Kasun Perera, 0771234567</span>. You can paste from Excel.
+
+          {/* Excel / CSV upload */}
+          <div className="mt-3 rounded-xl border border-dashed border-[#d4af37]/40 bg-[#050b2a]/50 p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-gold-gradient text-[#120f04] font-cinzel text-xs font-bold tracking-[0.2em] uppercase"
+            >
+              <FileSpreadsheet className="w-4 h-4" /> Upload Excel / CSV
+            </button>
+            <p className="text-xs text-[#a9a08a] leading-relaxed">
+              Columns like <span className="text-[#f3e5ab]"># · Name · WhatsApp No</span>. The “#” column is ignored and
+              numbers like 0771234567 or 771234567 both work.
+            </p>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".xlsx,.csv,.txt,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
+              className="hidden"
+              onChange={(e) => importFile(e.target.files?.[0])}
+            />
+          </div>
+          {notice && (
+            <p className={`mt-3 text-xs rounded-lg px-3 py-2 ${notice.ok ? 'bg-emerald-900/30 text-emerald-200 border border-emerald-400/20' : 'bg-red-900/30 text-red-200 border border-red-400/20'}`}>
+              {notice.text}
+            </p>
+          )}
+
+          <p className="mt-5 text-xs text-[#a9a08a]">
+            Or type / paste names — one per line, with the number after a comma, e.g.{' '}
+            <span className="text-[#f3e5ab]">Kasun Perera, 0771234567</span>. Rows copied from Excel work too.
           </p>
           <textarea
             value={input}
@@ -195,6 +273,76 @@ export default function AdminPage() {
             Reset to default
           </button>
         </details>
+
+        {/* Bulk send */}
+        {withNumber > 0 && (
+          <section className="mt-8 rounded-2xl border border-[#1fa855]/40 bg-[linear-gradient(180deg,rgba(31,168,85,0.12),rgba(11,22,80,0.6))] p-4 sm:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="font-cinzel text-sm tracking-[0.2em] uppercase text-[#7ff0a8]">Send to all on WhatsApp</h2>
+              <div className="inline-flex rounded-full border border-white/15 p-0.5 text-xs">
+                {(['auto', 'web'] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setMode(m)}
+                    className={`px-3 py-1.5 rounded-full ${mode === m ? 'bg-[#1fa855] text-white' : 'text-[#d8ccb4]'}`}
+                  >
+                    {m === 'auto' ? 'On phone' : 'On computer (WhatsApp Web)'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* progress */}
+            <div className="mt-4">
+              <div className="flex justify-between text-xs text-[#d8ccb4]">
+                <span>{withNumber - queue.length} of {withNumber} sent</span>
+                <span>{queue.length} left</span>
+              </div>
+              <div className="mt-1.5 h-2 rounded-full bg-white/10 overflow-hidden">
+                <div
+                  className="h-full bg-[#1fa855] transition-[width] duration-500"
+                  style={{ width: `${((withNumber - queue.length) / withNumber) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {current ? (
+              <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-3">
+                <a
+                  href={whatsappUrl(current)}
+                  target={waTarget}
+                  rel="noreferrer"
+                  onClick={() => {
+                    update(current.id, { sent: true });
+                    setSkipped((s) => s.filter((id) => id !== current.id));
+                  }}
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-4 rounded-2xl bg-[#1fa855] hover:bg-[#25c463] text-white font-semibold text-sm shadow-[0_8px_24px_rgba(31,168,85,0.35)]"
+                >
+                  <Send className="w-5 h-5" />
+                  <span className="truncate">Send to {current.name}</span>
+                </a>
+                <button
+                  onClick={() =>
+                    setSkipped((s) => (s.includes(current.id) ? [...s.filter((id) => id !== current.id), current.id] : [...s, current.id]))
+                  }
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-2xl border border-white/20 text-[#d8ccb4] text-xs"
+                >
+                  <SkipForward className="w-4 h-4" /> Skip for now
+                </button>
+              </div>
+            ) : (
+              <p className="mt-5 text-sm text-[#7ff0a8]">🎉 Everyone with a WhatsApp number has been sent their invitation.</p>
+            )}
+
+            <p className="mt-4 text-[11px] text-[#a9a08a] leading-relaxed">
+              Tap the green button → WhatsApp opens with the message ready → press <b>Send</b> in WhatsApp → come back and
+              tap again for the next person. WhatsApp doesn't allow fully automatic bulk sending from a normal account, so
+              one tap each keeps your number safe. Sending to many people who haven't saved your number can get an
+              account flagged — sending at a calm pace helps.
+              {mode === 'web' && ' WhatsApp Web opens in one tab that is reused for each person.'}
+            </p>
+          </section>
+        )}
 
         {/* Guest list */}
         <section className="mt-8">
@@ -261,7 +409,7 @@ export default function AdminPage() {
                   <div className="mt-3 flex flex-wrap gap-2">
                     <a
                       href={whatsappUrl(g)}
-                      target="_blank"
+                      target={waTarget}
                       rel="noreferrer"
                       onClick={() => update(g.id, { sent: true })}
                       className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#1fa855] hover:bg-[#25c463] text-white text-xs font-semibold"
